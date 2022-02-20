@@ -1,0 +1,23 @@
+<!-- Launch file for naive_motion_predict -->
+<launch>
+    <arg name="interval_sec" default="0.1"/>
+    <arg name="num_prediction" default="50"/>
+    <arg name="sensor_height" default="2.0"/>
+    <arg name="filter_out_close_object_threshold" default="1.5"/>
+    <arg name="input_topic" default="/casper_auto/tracking/object_tracker/objects"/>
+
+    <remap from="/detection/objects" to="$(arg input_topic)"/>
+
+    <node pkg="naive_motion_predict" type="naive_motion_predict" name="naive_motion_predict" output="log">
+        <param name="interval_sec" value="$(arg interval_sec)"/>
+        <param name="num_prediction" value="$(arg num_prediction)"/>
+        <param name="sensor_height" value="$(arg sensor_height)"/>
+        <param name="filter_out_close_object_threshold" value="$(arg filter_out_close_object_threshold)"/>
+
+        <remap from="/prediction/objects" to="/casper_auto/prediction/motion_predictor/objects" />
+        <remap from="/prediction/path_markers" to="/casper_auto/prediction/motion_predictor/path_markers" />
+    </node>
+
+    <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="naive_prediction_visualization_01"
+          output="log" ns="/casper_auto/prediction/motion_predictor" />
+</launch>
