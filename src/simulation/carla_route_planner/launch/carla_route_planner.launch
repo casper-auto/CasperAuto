@@ -1,0 +1,20 @@
+<!-- -->
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name='role_name' default='ego_vehicle' />
+  <arg name="spawn_point" default=""/>
+  <arg name="target_point" default=""/>
+  <arg name='route_range' default='500.0' />
+
+  <param name="/carla/host" value="$(arg host)" />
+  <param name="/carla/port" value="$(arg port)" />
+
+  <node pkg="carla_route_planner" type="carla_route_planner.py" name="carla_route_planner" output="screen">
+    <param name="role_name" value="$(arg role_name)" />
+    <param name="spawn_point" value="$(arg spawn_point)"/>
+    <param name="route_range" value="$(arg route_range)" />
+    <param name="target_point" value="$(arg target_point)" />
+  </node>
+
+</launch>

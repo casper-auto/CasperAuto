@@ -1,0 +1,75 @@
+<!-- -->
+<launch>
+  <arg name="role_name" default='' />
+  <arg name="spawn_point" default=''/>
+  <arg name="detect_range" default="50.0" />
+  <arg name="car_width" default="2.0" />
+  <arg name="car_length" default="5.0" />
+  <arg name="goal_point" default=""/>
+  <arg name="ghost_car" default=""/>
+  <arg name="ghost_point" default=""/>
+
+  <arg name="predicted_vehicles_topic" default="/region/all_cars_predictions" />
+  <arg name="predicted_pedestrians_topic" default="/region/pedestrians_prediction" />
+
+  <node pkg="region_of_interest" type="lane_line_publisher_format.py" name="lane_line_publisher" output="screen">
+    <param name="role_name" value="$(arg role_name)" />
+    <param name="spawn_point" value="$(arg spawn_point)"/>
+    <param name="goal_point" value="$(arg goal_point)"/>
+  </node>
+
+  <include file="$(find region_of_interest)/launch/detected_object_publisher.launch">
+    <arg name="predicted_vehicles_topic" value="$(arg predicted_vehicles_topic)"/>
+    <arg name="predicted_pedestrians_topic" value="$(arg predicted_pedestrians_topic)"/>
+  </include>
+
+  <node pkg="region_of_interest" type="region_of_interest_format.py" name="region_of_interest" output="screen">
+    <param name="role_name" type="string" value="$(arg role_name)" />
+    <param name="detect_range" type="double" value="$(arg detect_range)" />
+    <param name="car_width" type="double" value="$(arg car_width)" />
+    <param name="car_length" type="double" value="$(arg car_length)" />
+    <param name="ghost_car" type="bool" value="$(arg ghost_car)" />
+    <param name="ghost_point" value="$(arg ghost_point)" />
+
+    <param name="frequency_update" value="10.0" />
+    <param name="add_perception_errors" type="bool" value="false" />
+    <param name="add_localization_errors" type="bool" value="false" />
+
+    <param name="perception_latency_detection" value="1.0" />
+    <param name="detection_alpha" value="2.0" />
+    <param name="detection_beta" value="5.0" />
+    <param name="perception_latency" value="0.15" />
+    <param name="tracking_error_prob" value="0.05" />
+    <param name="max_frames_not_detected" value="4" />
+    <param name="prob_pcp_buildup_start" value="0.05" />
+    <param name="size_pcp_jump" value="0.75" />
+    <param name="seconds_pcp_acum" value="2.0" />
+    <param name="noise_agents_pos_lat_start" value="0.1" />
+    <param name="noise_agents_pos_long_start" value="0.1" />
+    <param name="noise_agents_head_start" value="10.0" />
+    <param name="noise_agents_vel_start" value="0.05" />
+    <param name="noise_agents_acc_start" value="0.05" />
+    <param name="noise_agents_pos_lat_rel" value="0.05" />
+    <param name="noise_agents_pos_long_rel" value="0.075" />
+    <param name="noise_agents_head_rel" value="0.25" />
+    <param name="noise_agents_vel_rel" value="0.1" />
+    <param name="noise_agents_acc_rel" value="0.1" />
+    <param name="thld_agents_stopped" value="0.1" />
+    <param name="prob_agents_not_stopped" value="0.05" />
+
+    <param name="latency_localization" value="0.15" />
+    <param name="prob_loc_buildup_start" value="0.05" />
+    <param name="prob_loc_small_jump" value="0.8" />
+    <param name="size_loc_small_jump" value="0.2" />
+    <param name="size_loc_big_jump" value="0.75" />
+    <param name="seconds_loc_acum" value="2.0" />
+    <param name="noise_loc_pos_lat" value="0.1" />
+    <param name="noise_loc_pos_long" value="0.3" />
+    <param name="noise_loc_head" value="5.0" />
+    <param name="noise_loc_speed" value="0.2" />
+
+  </node>
+
+  <include file="$(find region_of_interest)/launch/stop_sign_processor.launch" />
+
+</launch>

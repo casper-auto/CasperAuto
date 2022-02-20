@@ -1,0 +1,16 @@
+<!-- -->
+<launch>
+
+  <arg name="predicted_vehicles_topic" default="/region/all_cars_predictions" />
+  <arg name="predicted_pedestrians_topic" default="/region/pedestrians_prediction" />
+  <arg name="publish_object_cube" default="true" />
+  <arg name="publish_object_info" default="true" />
+
+  <node pkg="region_of_interest" type="detected_object_publisher.py" name="detected_object_visualizer" output="screen" >
+    <remap from="/prediction/vehicles" to="$(arg predicted_vehicles_topic)" />
+    <remap from="/prediction/pedestrians" to="$(arg predicted_pedestrians_topic)" />
+    <param name="publish_object_cube" type="bool" value="$(arg publish_object_cube)" />
+    <param name="publish_object_info" type="bool" value="$(arg publish_object_info)" />
+  </node>
+
+</launch>

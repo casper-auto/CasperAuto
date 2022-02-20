@@ -3,7 +3,7 @@
   <name>spiral_planner</name>
   <version>0.0.0</version>
   <description>The spiral_planner package</description>
-  <maintainer email="pxu@honda-ri.com">Peng Xu</maintainer>
+  <maintainer email="robotpengxu@gmail.com">Peng Xu</maintainer>
   <license>MIT</license>
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>rospy</build_depend>

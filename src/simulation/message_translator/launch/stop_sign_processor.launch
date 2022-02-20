@@ -1,0 +1,18 @@
+<!-- -->
+<launch>
+
+  <arg name="stop_line_offset" default="2.5" />
+  <arg name="stop_dist_thresh" default="5.0" />
+  <arg name="stop_speed_thresh" default="0.1" />
+  <arg name="stop_timer_duration" default="3.0" />
+  <arg name="publish_ghost" default="true" />
+
+  <node pkg="region_of_interest" type="stop_sign_processor.py" name="stop_sign_processor" output="screen">
+    <param name="stop_line_offset" type="double" value="$(arg stop_line_offset)"/>
+    <param name="stop_dist_thresh" type="double" value="$(arg stop_dist_thresh)"/>
+    <param name="stop_speed_thresh" type="double" value="$(arg stop_speed_thresh)"/>
+    <param name="stop_timer_duration" type="double" value="$(arg stop_timer_duration)"/>
+    <param name="publish_ghost" type="bool" value="$(arg publish_ghost)" />
+  </node>
+
+</launch>
