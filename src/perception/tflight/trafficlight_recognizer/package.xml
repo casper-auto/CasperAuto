@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>trafficlight_recognizer</name>
+  <version>1.12.0</version>
+  <description>The trafficlight_recognizer package</description>
+  <maintainer email="hirabayashi@ertl.jp">Manato HIRABAYASHI</maintainer>
+  <license>Apache 2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>autoware_msgs</depend>
+  <depend>cmake_modules</depend>
+  <depend>cv_bridge</depend>
+  <depend>eigen</depend>
+  <depend>geometry_msgs</depend>
+  <depend>libvectormap</depend>
+  <depend>qtbase5-dev</depend>
+  <depend>roscpp</depend>
+  <depend>roslint</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>tf</depend>
+  <depend>vector_map</depend>
+  <depend>vector_map_server</depend>
+  <depend>visualization_msgs</depend>
+  <depend>lanelet2_extension</depend>
+
+</package>

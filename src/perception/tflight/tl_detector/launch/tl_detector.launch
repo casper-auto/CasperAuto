@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="tl_detector" type="tl_detector.py" name="tl_detector" output="screen">
+    <remap from="/current_pose" to="/casper_auto/localization/current_pose" />
+    <remap from="/image_color" to="/carla/ego_vehicle/camera/rgb/center/image" />
+  </node>
+</launch>

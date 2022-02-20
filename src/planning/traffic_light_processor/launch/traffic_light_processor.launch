@@ -1,0 +1,9 @@
+<!-- -->
+<launch>
+
+  <node pkg="traffic_light_processor" type="traffic_light_processor" name="traffic_light_processor" output="screen">
+    <remap from="/current_pose" to="/casper_auto/localization/current_pose" />
+    <remap from="/selected_path" to="/casper_auto/planning/final_path" />
+  </node>
+
+</launch>
