@@ -1,0 +1,5 @@
+<library path="lib/libodr_map">
+  <class name="odr_map/PathVisualizer" type="odr_map::PathVisualizer" base_class_type="rviz::Tool">
+    <description>visualizer paths of odr_map</description>
+  </class>
+</library>

@@ -1,0 +1,3 @@
+float32 distance
+---
+casper_auto_msgs/MapBasepath[] all_basepaths

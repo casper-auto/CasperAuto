@@ -1,0 +1,9 @@
+float32 x
+float32 y
+float32 z
+float32 distance
+---
+Header header
+casper_auto_msgs/BoundaryPolygons boundaries
+casper_auto_msgs/BoundaryPolygons sidewalks
+casper_auto_msgs/BoundaryPolygons crosswalks

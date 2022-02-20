@@ -1,0 +1,16 @@
+<!-- -->
+<launch>
+
+  <arg name="map_step" default="1.0" />
+
+  <node pkg="odr_map_loader" type="odr_map_loader" name="odr_map_loader" output="screen">
+    <param name="map_step" type="double" value="$(arg map_step)" />
+  </node>
+
+  <node pkg="odr_map_loader" type="odr_map_path_finder" name="odr_map_path_finder" output="screen" >
+    <param name="map_step" type="double" value="$(arg map_step)" />
+  </node>
+
+  <node pkg="odr_map_loader" type="traffic_info_loader" name="traffic_info_loader" output="screen"/>
+
+</launch>

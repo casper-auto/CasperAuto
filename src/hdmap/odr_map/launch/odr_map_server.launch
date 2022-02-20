@@ -1,0 +1,10 @@
+<launch>
+
+    <!-- Step of point sequences such as MapBasepath.point, MapLane.LaneInformation.point and etc.. -->
+    <arg name="step" default="1.0"/>
+
+    <node pkg="odr_map" name="odr_map_server" type="odr_map_server" output="screen">
+        <param name="step" value="$(arg step)"/>
+    </node>
+
+</launch>

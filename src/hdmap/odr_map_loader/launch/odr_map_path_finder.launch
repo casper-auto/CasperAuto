@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+
+  <rosparam command="load" file="$(find demo_entrance)/config/turning_junction_demo.yaml" ns="scenario"/>
+
+  <arg name="map_step" default="1.0" />
+
+  <node pkg="odr_map_loader" type="odr_map_path_finder" name="odr_map_path_finder" output="screen">
+    <param name="map_step" type="double" value="$(arg map_step)" />
+  </node>
+
+</launch>
