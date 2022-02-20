@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!-- -->
+<launch>
+  <!-- CARLA connection -->
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name='timeout' default='10'/>
+
+  <!-- Ego vehicle -->
+  <arg name='role_name' default='ego_vehicle'/>
+  <arg name="vehicle_filter" default='vehicle.*'/>
+
+  <!-- Planner and Controller -->
+  <arg name='route_range' default='180.0' />
+  <arg name="lookahead_distance" default="10.0" />
+  <!-- "PurePursuit", "Stanley", "MPC" -->
+  <arg name="control_method" default="MPC" />
+
+  <param name="/carla/host" value="$(arg host)" />
+  <param name="/carla/port" value="$(arg port)" />
+
+<!--Scenario: Turning Junction Demo (same road as 6 except spawn point + ghost)-->
+  <rosparam command="load"
+      file="$(find demo_entrance)/config/turning_junction_demo.yaml"
+      ns="scenario"/>
+  <arg name="town" default='Town01'/>
+  <arg name="spawn_point" default="112,-129.5,1.0,0,0,180"/>
+  <arg name="target_point" default="88.2,-180,0"/>
+  <arg name="goal_point" default="88.2,-180,0"/>
+  <arg name="ghost_car" default="true"/>
+  <arg name="ghost_point" default="95,-129.9,0,0,0,180"/>
+
+  <include file="$(find demo_entrance)/launch/carla_ros_bridge_scenario.launch">
+    <arg name='host' value="$(arg host)" />
+    <arg name='port' value="$(arg port)" />
+    <arg name="town" value="$(arg town)" />
+    <arg name="role_name" value='$(arg role_name)'/>
+    <arg name="spawn_point" value="$(arg spawn_point)"/>
+  </include>
+
+  <include file="$(find vehicle_models)/launch/vehicle_description_sim.launch" />
+
+  <include file="$(find region_of_interest)/launch/region_of_interest_format.launch">
+    <arg name="spawn_point" value="$(arg spawn_point)"/>
+    <arg name='role_name' value='$(arg role_name)'/>
+    <arg name='goal_point' value='$(arg goal_point)' />
+    <arg name='ghost_car' value='$(arg ghost_car)' />
+    <arg name='ghost_point' value='$(arg ghost_point)' />
+  </include>
+
+  <include file="$(find route_planner)/launch/route_planner.launch">
+    <arg name='role_name' value='$(arg role_name)'/>
+    <arg name="spawn_point" value="$(arg spawn_point)"/>
+    <arg name='route_range' value='$(arg route_range)' />
+    <arg name='target_point' value='$(arg target_point)' />
+  </include>
+
+  <include file="$(find odr_map_loader)/launch/odr_map_loader.launch">
+    <arg name="map_file" value="$(find odr_map_loader)/data/Town01.xodr" />
+  </include>
+
+  <!--include file="$(find replay_path_planner)/launch/replay_path_planner.launch">
+    <arg name='lookahead_distance' value='$(arg lookahead_distance)'/>
+  </include-->
+
+  <!--include file="$(find motion_controller)/launch/motion_controller.launch">
+    <arg name='control_method' value='$(arg control_method)'/>
+  </include-->
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find demo_entrance)/rviz/demo.rviz"/>
+
+</launch>

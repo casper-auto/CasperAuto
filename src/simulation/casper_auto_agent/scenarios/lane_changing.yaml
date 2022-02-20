@@ -1,0 +1,12 @@
+#For same direction traffic lanes, they are numbered from left most 0 to right(1, 2, 3, 4)
+
+type_scenario: same-direction-traffic
+lanes: [0, 1]
+
+start_point_lane0: [208.4, -181.0, 3.0]
+target_point_lane0: [80.0, -196.7, 1.0]
+merging_point_lane0: [0.0, 0.0, 0.0]
+
+start_point_lane1: [150.0, -193.2, 3.0]
+target_point_lane1: [80.0, -193.2, 1.0]
+merging_point_lane1: [0.0, 0.0, 0.0]

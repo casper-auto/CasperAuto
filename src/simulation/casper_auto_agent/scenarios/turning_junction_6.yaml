@@ -1,0 +1,19 @@
+#For cross traffic lanes are numbered as 0 for startin AD lane protocol for target (100) and crossing lanes (99, 98, 97)
+
+type_scenario: cross-traffic
+lanes: [0, 99, 100]
+
+start_point_lane0: [102.0, -129.4, 0.0]
+target_point_lane0: [88.4, -180.0, 0.0]
+merging_point_lane0: [0.0, 0.0, 0.0]
+
+start_point_lane99: [92.4, -180.0, 0.0]
+target_point_lane99: [92.4, -20.0, 0.0]
+merging_point_lane99: [92.4, -131.2, 0.0]
+
+start_point_lane100: [88.4, -20.0, 0.0]
+target_point_lane100: [88.4, -180.0, 0.0]
+merging_point_lane100: [88.4, -135.0, 0.0]
+
+stop_lines: [[[100.5, -131.5], [100.5, -127.0]]]
+crosswalks: [[[96.5, -135.5], [96.5, -126.5]]]
