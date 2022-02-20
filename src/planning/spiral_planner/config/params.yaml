@@ -1,0 +1,25 @@
+# ros
+global_frame: "map"
+local_frame: "ego_vehicle"
+# path planner
+lookahead_distance: 10.0
+path_distance: 100.0
+num_paths: 1 # pick from odd numbers [1,3,5,7]
+lateral_offset: 0.75
+longitudinal_offset: 4.0
+run_parallel: true
+# path optimizer
+
+# collision checker
+enable_collision_checker: true
+circle_offsets: [-1.0, 1.0, 3.0]
+circle_radii: [1.5, 1.5, 1.5]
+path_select_weight: 10.0
+# velocity planner
+enable_velocity_planner: true
+cruise_speed: 3.0
+time_step: 0.1
+accel_max: 2.0
+slow_speed: 1.0
+# other
+enable_obstacles_display: true

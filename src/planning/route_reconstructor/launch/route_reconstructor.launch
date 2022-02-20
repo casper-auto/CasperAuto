@@ -1,0 +1,10 @@
+<!-- -->
+<launch>
+
+  <arg name="route_distance" default="10000.0" />
+
+  <node pkg="route_reconstructor" type="route_reconstructor" name="route_reconstructor" output="log">
+    <param name="route_distance" type="double" value="$(arg route_distance)" />
+  </node>
+
+</launch>

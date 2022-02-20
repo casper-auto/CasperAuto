@@ -1,0 +1,21 @@
+<!-- -->
+<launch>
+  <!-- <param name="/use_sim_time" value="true" /> -->
+  <arg name="role_name" default="ego_vehicle" />
+  <arg name="control_method" default="MPC" /> <!-- "PurePursuit", "Stanley", "MPC" -->
+
+  <node pkg="motion_controller" type="motion_controller" name="motion_controller" output="log">
+    <param name="role_name" type="string" value="$(arg role_name)" />
+    <param name="control_method" type="string" value="$(arg control_method)" />
+    <param name="add_latency" type="bool" value="false" />
+    <param name="latency_throttle" type="double" value="0.1" />
+    <param name="latency_brake" type="double" value="0.1" />
+    <param name="latency_steering" type="double" value="0.1" />
+    <param name="lag_throttle" type="double" value="0.8" />
+    <param name="lag_brake" type="double" value="0.5" />
+    <param name="lag_steering" type="double" value="0.2" />
+    <param name="lookahead_t_mpc" type="double" value="1.5" />
+    <param name="lookahead_dist_mp" type="double" value="3.5" />
+  </node>
+
+</launch>

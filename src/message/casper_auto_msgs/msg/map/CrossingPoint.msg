@@ -1,0 +1,5 @@
+uint32 conflict_road_id
+uint32 conflict_section_id
+uint32 conflict_lane_id
+float32 s_offset
+float32 t

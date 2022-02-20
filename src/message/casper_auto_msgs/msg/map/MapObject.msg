@@ -1,0 +1,9 @@
+Header header
+casper_auto_msgs/MapBasepath[] basepaths
+casper_auto_msgs/MapLane[] lanes
+casper_auto_msgs/MapBoundary[] boundaries
+casper_auto_msgs/MapTrafficLight[] traffic_lights
+casper_auto_msgs/MapCrosswalk[] crosswalks
+casper_auto_msgs/MapStopLine[] stop_lines
+casper_auto_msgs/MapRoadGuard[] road_guards
+casper_auto_msgs/MapTrafficSign[] traffic_signs

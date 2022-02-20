@@ -1,0 +1,23 @@
+<!-- -->
+<launch>
+
+  <arg name="lookahead_distance" default="20.0" />
+
+  <node pkg="replay_path_planner" type="replay_path_planner" name="replay_path_planner" output="log">
+    <param name="lookahead_distance" type="double" value="$(arg lookahead_distance)" />
+
+    <remap from="/odometry" to="/casper_auto/localization/odometry" />
+    <remap from="/global_route" to="/casper_auto/planning/global_route" />
+    <remap from="/cruise_speed" to="/casper_auto/planning/cruise_speed" />
+
+    <remap from="/final_path" to="/casper_auto/planning/final_path" />
+    <remap from="/final_waypoints" to="/casper_auto/planning/final_waypoints" />
+    <remap from="/final_path_marker" to="/casper_auto/planning/final_path_marker" />
+  </node>
+
+  <node pkg="replay_path_planner" type="cruise_speed_pub" name="cruise_speed_pub" output="log">
+    <remap from="/odometry" to="/casper_auto/localization/odometry" />
+    <remap from="/cruise_speed" to="/casper_auto/planning/cruise_speed" />
+  </node>
+
+</launch>
