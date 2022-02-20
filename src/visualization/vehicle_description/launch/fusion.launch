@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+  <param name="robot_description" command="$(find xacro)/xacro $(find vehicle_description)/urdf/fusion_13_structure.urdf.xacro" />
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="use_tf_static" value="false" />
+    <param name="publish_frequency" type="double" value="20.0" />
+  </node>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 1 ego_vehicle base_link 50" />
+
+</launch>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<robot name="mkz_gazebo" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:property name="wheel_friction" value="1.2" />
+  <xacro:arg name="pub_odom" default="false"/>
+  <xacro:arg name="pub_tf" default="false"/>
+
+  <gazebo reference="base_link" >
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+  </gazebo>
+
+  <gazebo reference="wheel_fl" >
+    <mu1>${wheel_friction}</mu1>
+    <mu2>${wheel_friction}</mu2>
+  </gazebo>
+
+  <gazebo reference="wheel_fr" >
+    <mu1>${wheel_friction}</mu1>
+    <mu2>${wheel_friction}</mu2>
+  </gazebo>
+
+  <gazebo reference="wheel_rl" >
+    <mu1>${wheel_friction}</mu1>
+    <mu2>${wheel_friction}</mu2>
+  </gazebo>
+
+  <gazebo reference="wheel_rr" >
+    <mu1>${wheel_friction}</mu1>
+    <mu2>${wheel_friction}</mu2>
+  </gazebo>
+  
+  <gazebo>
+    <!-- Simulated vehicle interface -->
+    <plugin name="dbw_interface_plugin" filename="libdbw_mkz_gazebo_vehicle.so" >
+      <start_gear>$(arg start_gear)</start_gear>
+      <car_model>$(arg car_model)</car_model>
+      <car_year>$(arg car_year)</car_year>
+    </plugin>
+
+    <!-- Publish TF and odom messages with true global frame pose and velocity -->
+    <plugin name="pose_plugin" filename="libdbw_mkz_gazebo_pose.so" >
+      <pub_tf>$(arg pub_tf)</pub_tf>
+      <pub_odom>$(arg pub_odom)</pub_odom>
+    </plugin>
+  </gazebo>
+
+</robot>
+ 

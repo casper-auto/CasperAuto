@@ -1,0 +1,9 @@
+.vscode
+
+catkin_ws
+.catkin_tools
+
+*.pptx#
+
+*.pcd
+*.pyc

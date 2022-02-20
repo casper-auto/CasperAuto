@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<robot name="dbw_mkz_loader" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find vehicle_description)/urdf/$(arg urdf_model)_structure.urdf.xacro" />
+</robot>

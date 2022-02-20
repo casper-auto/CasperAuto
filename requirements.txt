@@ -1,0 +1,11 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+numpy
+py-trees==0.8.3
+networkx==2.2
+Shapely==1.6.4
+psutil==5.8.0
+elementpath==1.3.3
+xmlschema==1.0.18
+pygame==2.0.1
+rospkg
