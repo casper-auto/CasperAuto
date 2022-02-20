@@ -1,0 +1,10 @@
+<!-- -->
+<launch>
+
+  <arg name="route_distance" default="200.0" />
+
+  <node pkg="route_planner" type="route_planner" name="route_planner" output="log">
+    <param name="route_distance" type="double" value="$(arg route_distance)" />
+  </node>
+
+</launch>
