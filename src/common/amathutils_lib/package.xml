@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>amathutils_lib</name>
+  <version>1.12.0</version>
+  <description>The libamathutils package</description>
+  <maintainer email="yusuke.fujii@tier4.jp">Yusuke FUJII</maintainer>
+  <author email="yusuke.fujii@tier4.jp">Yusuke FUJII</author>
+  <license>Apache 2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <test_depend>rostest</test_depend>
+
+  <depend>autoware_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>roslint</depend>
+  <depend>tf2</depend>
+  <depend>tf</depend>
+  <depend>eigen</depend>
+</package>

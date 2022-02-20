@@ -1,0 +1,4 @@
+sensor_msgs/Image roi_image
+---
+uint8 class_id
+float32 confidence

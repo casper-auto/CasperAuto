@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>driveway_object_filter</name>
+  <version>0.0.1</version>
+  <description>driveway_object_filter</description>
+  <maintainer email="robotpengxu@gmail.com">amc</maintainer>
+  <license>Apache</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>autoware_msgs</depend>
+  <depend>casper_auto_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>grid_map_cv</depend>
+  <depend>grid_map_msgs</depend>
+  <depend>grid_map_ros</depend>
+  <depend>roscpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf</depend>
+  <depend>odr_map</depend>
+
+  <test_depend>rostest</test_depend>
+  <test_depend>rosunit</test_depend>
+</package>

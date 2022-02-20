@@ -1,0 +1,23 @@
+<!-- -->
+<launch>
+
+  <arg name="namespace" default="/casper_auto/filtering/driveway_filter"/>
+  <arg name="input_topic" default="/casper_auto/detection/shape_estimation/objects" />
+  <arg name="output_topic" default="/casper_auto/filtering/driveway_filter/objects" />
+  <arg name="enable_visualizer" default="true"/>
+
+  <!--  -->
+  <node pkg="driveway_object_filter" type="driveway_object_filter" name="driveway_object_filter" output="log">
+    <remap from="/current_pose" to="/casper_auto/localization/current_pose" />
+    <remap from="/detected_objects" to="$(arg input_topic)" />
+    <remap from="/filtered_objects" to="$(arg output_topic)" />
+  </node>
+
+  <group if="$(arg enable_visualizer)">
+    <node pkg="detected_objects_visualizer" type="visualize_detected_objects" name="driveway_filter_visualization_01"
+          output="log" ns="$(arg namespace)" >
+      <param name="objects_src_topic" value="/objects"/>
+    </node>
+  </group>
+
+</launch>
