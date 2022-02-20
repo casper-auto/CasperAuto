@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+
+  <arg name="pose_topic" default="/casper_auto/localization/current_pose" />
+  <arg name="odom_topic" default="/casper_auto/localization/odometry" />
+
+  <node pkg="gnss_data_convertor" type="gnss_data_convertor.py" name="gnss_data_convertor" output="log">
+    <remap from="/current_pose" to="$(arg pose_topic)" />
+    <remap from="/odometry" to="$(arg odom_topic)" />
+  </node>
+
+</launch>

@@ -1,0 +1,12 @@
+<!-- -->
+<launch>
+
+  <arg name="pose_topic" default="/casper_auto/localization/current_pose" />
+  <arg name="odom_topic" default="/casper_auto/localization/odometry" />
+
+  <node pkg="gnss_imu_localizer" type="gnss_imu_localizer.py" name="gnss_imu_localizer" output="log">
+    <remap from="/current_pose" to="$(arg pose_topic)" />
+    <remap from="/odometry" to="$(arg odom_topic)" />
+  </node>
+
+</launch>

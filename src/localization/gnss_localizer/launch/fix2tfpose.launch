@@ -1,0 +1,16 @@
+<!-- -->
+<launch>
+
+  <arg name="plane" default="20"/>
+  <arg name="pose_topic" default="/casper_auto/localization/current_pose" />
+  <arg name="odom_topic" default="/casper_auto/localization/odometry" />
+
+  <node pkg="gnss_localizer" type="fix2tfpose" name="fix2tfpose" output="log">
+    <param name="plane" value="$(arg plane)"/>
+    <remap from="gps" to="odom"/>
+    <remap from="fix" to="/carla/ego_vehicle/gnss/fix"/>
+    <remap from="/gnss_pose" to="$(arg pose_topic)" />
+    <remap from="/odometry" to="$(arg odom_topic)" />
+  </node>
+
+</launch>
