@@ -4,14 +4,14 @@
   <rosparam command="load" file="$(find spiral_planner)/config/params.yaml" />
 
   <node pkg="spiral_planner" type="spiral_planner" name="spiral_planner" output="log">
-    <remap from="/odometry" to="/casper_auto/localization/odometry" />
-    <remap from="/detected_objects" to="/casper_auto/tracking/objects" />
-    <remap from="/global_route" to="/casper_auto/planning/global_route" />
-
-    <remap from="/selected_path" to="/casper_auto/planning/final_path" />
-    <remap from="/final_waypoints" to="/casper_auto/planning/final_waypoints" />
-    <remap from="/generated_paths_marker" to="/casper_auto/planning/generated_paths_marker" />
-    <remap from="/obstacle_polygons" to="/casper_auto/planning/obstacle_polygons" />
+    <remap from="/current_pose" to="/casper_auto/current_pose" />
+    <remap from="/current_speed" to="/casper_auto/current_speed" />
+    <remap from="/detected_objects" to="/casper_auto/detected_objects" />
+    <remap from="/global_route" to="/casper_auto/global_route" />
+    <remap from="/selected_path" to="/casper_auto/final_path" />
+    <remap from="/final_waypoints" to="/casper_auto/final_waypoints" />
+    <remap from="/generated_paths_marker" to="/casper_auto/generated_paths_marker" />
+    <remap from="/obstacle_polygons" to="/casper_auto/obstacle_polygons" />
   </node>
 
 </launch>

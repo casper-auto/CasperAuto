@@ -16,6 +16,7 @@
 
 #include <ros/ros.h>
 
+#include <std_msgs/Float32.h>
 #include <derived_object_msgs/Object.h>
 #include <derived_object_msgs/ObjectArray.h>
 #include <geometry_msgs/Point.h>
@@ -79,7 +80,8 @@ private:
   ros::NodeHandle nh_;
 
   // ros subscribers
-  ros::Subscriber current_state_sub_;
+  ros::Subscriber current_pose_sub_;
+  ros::Subscriber current_speed_sub_;
   ros::Subscriber global_route_sub_;
   ros::Subscriber detected_objects_sub_;
   ros::Subscriber stop_line_signal_sub_;
@@ -179,7 +181,9 @@ private:
   std::vector<Pose2D> convertFromNavPath(const nav_msgs::Path &msg);
 
   // callback functions
-  void currentStateCallback(const nav_msgs::Odometry::ConstPtr &msg);
+  void currentPoseCallback(const geometry_msgs::PoseStamped::ConstPtr &msg);
+
+  void currentSpeedCallback(const std_msgs::Float32::ConstPtr &msg);
 
   void detectedObjectsCallback(
       const autoware_msgs::DetectedObjectArray::ConstPtr &msg);

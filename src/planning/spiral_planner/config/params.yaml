@@ -4,7 +4,7 @@ local_frame: "ego_vehicle"
 # path planner
 lookahead_distance: 10.0
 path_distance: 100.0
-num_paths: 1 # pick from odd numbers [1,3,5,7]
+num_paths: 7 # pick from odd numbers [1,3,5,7]
 lateral_offset: 0.75
 longitudinal_offset: 4.0
 run_parallel: true

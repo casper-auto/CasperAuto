@@ -77,8 +77,10 @@ void SpiralPlanner::initialize() {
   path_distance_ = max(path_distance_, lookahead_distance_);
 
   // ros subscribers
-  current_state_sub_ =
-      nh_.subscribe("/odometry", 1, &SpiralPlanner::currentStateCallback, this);
+  current_pose_sub_ =
+      nh_.subscribe("/current_pose", 1, &SpiralPlanner::currentPoseCallback, this);
+  current_speed_sub_ =
+      nh_.subscribe("/current_speed", 1, &SpiralPlanner::currentSpeedCallback, this);
   detected_objects_sub_ = nh_.subscribe(
       "/detected_objects", 1, &SpiralPlanner::detectedObjectsCallback, this);
   global_route_sub_ = nh_.subscribe("/global_route", 1,
@@ -550,14 +552,14 @@ SpiralPlanner::convertFromNavPath(const nav_msgs::Path &msg) {
 /////////////////////////
 // Callback Functions
 /////////////////////////
-void SpiralPlanner::currentStateCallback(
-    const nav_msgs::Odometry::ConstPtr &msg) {
+void SpiralPlanner::currentPoseCallback(
+    const geometry_msgs::PoseStamped::ConstPtr &msg) {
   // update current pose
-  current_state_.position.x = msg->pose.pose.position.x;
-  current_state_.position.y = msg->pose.pose.position.y;
+  current_state_.position.x = msg->pose.position.x;
+  current_state_.position.y = msg->pose.position.y;
 
   // get yaw from quaternion
-  geometry_msgs::Quaternion geo_quat = msg->pose.pose.orientation;
+  geometry_msgs::Quaternion geo_quat = msg->pose.orientation;
   // the incoming geometry_msgs::Quaternion is transformed to a tf::Quaterion
   tf::Quaternion quat;
   tf::quaternionMsgToTF(geo_quat, quat);
@@ -566,18 +568,18 @@ void SpiralPlanner::currentStateCallback(
   tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
   current_state_.yaw = yaw;
 
-  // update current speed
-  double vx = msg->twist.twist.linear.x;
-  double vy = msg->twist.twist.linear.y;
-
-  current_state_.vel = vx * vx + vy * vy;
-
   // update path height
-  path_height_ = msg->pose.pose.position.z;
+  path_height_ = msg->pose.position.z;
 
-  ROS_INFO("Current state: x: %.2f, y: %.2f, yaw: %.2f, vel: %.2f",
+  ROS_INFO("Current state: x: %.2f, y: %.2f, yaw: %.2f",
            current_state_.position.x, current_state_.position.y,
-           current_state_.yaw, current_state_.vel);
+           current_state_.yaw);
+}
+
+void SpiralPlanner::currentSpeedCallback(
+    const std_msgs::Float32::ConstPtr &msg) {
+  current_state_.vel = msg->data;
+  ROS_INFO("Current speed: %.2f", current_state_.vel);
 }
 
 void SpiralPlanner::detectedObjectsCallback(
