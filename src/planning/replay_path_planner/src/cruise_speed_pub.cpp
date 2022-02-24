@@ -3,26 +3,22 @@
 #include <chrono>
 #include <ctime>
 
-#include "ros/ros.h"
-#include "std_msgs/Float64.h"
-#include "nav_msgs/Odometry.h"
+#include <ros/ros.h>
+#include <std_msgs/Float32.h>
 
 using namespace std;
 
-double actual_speed = 0;
+double current_speed = 0;
 
-void egoStateCallback(const nav_msgs::Odometry::ConstPtr& msg) {
-  actual_speed = msg->twist.twist.linear.x;
+void currentSpeedCallback(const std_msgs::Float32::ConstPtr& msg) {
+  current_speed = msg->data;
 }
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "cruise_speed_pub");
   ros::NodeHandle n("~");
-
-  ros::Subscriber ego_state_sub = n.subscribe("/odometry", 1000, egoStateCallback);
-
-  ros::Publisher cruise_speed_pub = n.advertise<std_msgs::Float64>("/cruise_speed", 1000);
-
+  ros::Subscriber current_speed_sub = n.subscribe("/current_speed", 10, currentSpeedCallback);
+  ros::Publisher cruise_speed_pub = n.advertise<std_msgs::Float32>("/cruise_speed", 10);
   ros::Rate rate(60);
 
   // prepare csv files
@@ -51,13 +47,13 @@ int main(int argc, char **argv) {
     int speed_index = time_elapsed / time_interval;
     speed_index = min(speed_index, int(speed_cmds.size()-1));
     double cruise_speed = speed_cmds[speed_index];
-    out << time_elapsed << ", " << cruise_speed << ", " << actual_speed << endl;
-    ROS_INFO("Desired speed: %f, Actual speed: %f, Time Elapsed: %f", cruise_speed, actual_speed, time_elapsed);
+    out << time_elapsed << ", " << cruise_speed << ", " << current_speed << endl;
+    ROS_INFO("Desired speed: %f, Actual speed: %f, Time Elapsed: %f", cruise_speed, current_speed, time_elapsed);
 
     ////////////////////////////////////////////////////////////////////////////
     // Publish Desired Cruise Speed
     ////////////////////////////////////////////////////////////////////////////
-    std_msgs::Float64 msg;
+    std_msgs::Float32 msg;
     msg.data = cruise_speed;
     cruise_speed_pub.publish(msg);
 

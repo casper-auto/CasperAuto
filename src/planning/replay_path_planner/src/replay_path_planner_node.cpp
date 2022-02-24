@@ -1,28 +1,30 @@
 #include <iostream>
-#include "ros/ros.h"
-#include "std_msgs/Float64.h"
-#include "nav_msgs/Odometry.h"
-#include "nav_msgs/Path.h"
-#include "casper_auto_msgs/Waypoint.h"
-#include "casper_auto_msgs/WaypointArray.h"
-#include "visualization_msgs/Marker.h"
-#include "geometry_msgs/Quaternion.h"
-#include "tf/transform_datatypes.h"
-#include "tf/LinearMath/Matrix3x3.h"
+#include <ros/ros.h>
+#include <tf/transform_datatypes.h>
+#include <tf/LinearMath/Matrix3x3.h>
+#include <std_msgs/Float32.h>
+#include <nav_msgs/Odometry.h>
+#include <nav_msgs/Path.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/Quaternion.h>
+#include <visualization_msgs/Marker.h>
+#include <casper_auto_msgs/Waypoint.h>
+#include <casper_auto_msgs/WaypointArray.h>
+
 #include "replay_path_planner.h"
 
 using namespace std;
 
-vector<double> ego_state(4);
-double ego_z = 0;
+vector<double> current_pose(3);
+double current_speed;
+double current_z = 0;
 vector<vector<double>> global_route;
-double detect_range;
 double cruise_speed = 5.0;
 
-void egoStateCallback(const nav_msgs::Odometry::ConstPtr& msg) {
-  ROS_INFO("ego odometry got ...");
+void currentPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
+  ROS_INFO("Received the current_pose ...");
 
-  geometry_msgs::Quaternion geo_quat = msg->pose.pose.orientation;
+  geometry_msgs::Quaternion geo_quat = msg->pose.orientation;
 
   // the incoming geometry_msgs::Quaternion is transformed to a tf::Quaterion
   tf::Quaternion quat;
@@ -32,17 +34,22 @@ void egoStateCallback(const nav_msgs::Odometry::ConstPtr& msg) {
   double roll, pitch, yaw;
   tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
 
-  ego_state[0] = msg->pose.pose.position.x;
-  ego_state[1] = msg->pose.pose.position.y;
-  ego_state[2] = yaw;
-  ego_state[3] = msg->twist.twist.linear.x;
+  current_pose[0] = msg->pose.position.x;
+  current_pose[1] = msg->pose.position.y;
+  current_pose[2] = yaw;
 
-  ego_z = msg->pose.pose.position.z;
+  current_z = msg->pose.position.z;
 
-  ROS_INFO("Ego state: x: %.2f, y: %.2f, yaw: %.2f, vel: %.2f", ego_state[0], ego_state[1], ego_state[2], ego_state[3]);
+  // ROS_INFO("Current pose: x: %.2f, y: %.2f, yaw: %.2f", current_pose[0], current_pose[1], current_pose[2]);
 }
 
-void cruiseSpeedCallback(const std_msgs::Float64::ConstPtr& msg) {
+void currentSpeedCallback(const std_msgs::Float32::ConstPtr& msg) {
+  ROS_INFO("Received the current_speed ...");
+  current_speed = msg->data;
+  // ROS_INFO("Current speed: %.2f", current_speed);
+}
+
+void cruiseSpeedCallback(const std_msgs::Float32::ConstPtr& msg) {
   cruise_speed = msg->data;
 }
 
@@ -78,7 +85,8 @@ int main(int argc, char **argv) {
   ros::init(argc, argv, "replay_path_planner");
   ros::NodeHandle n("~");
 
-  ros::Subscriber ego_state_sub = n.subscribe("/odometry", 10, egoStateCallback);
+  ros::Subscriber current_pose_sub = n.subscribe("/current_pose", 10, currentPoseCallback);
+  ros::Subscriber current_speed_sub = n.subscribe("/current_speed", 10, currentSpeedCallback);
   ros::Subscriber global_route_sub = n.subscribe("/global_route", 10, globalRouteCallback);
   ros::Subscriber cruise_speed_sub = n.subscribe("/cruise_speed", 10, cruiseSpeedCallback);
 
@@ -93,7 +101,7 @@ int main(int argc, char **argv) {
   ReplayPathPlanner replay_path_planner(lookahead_distance);
 
   double prev_timestamp = ros::Time::now().toSec();
-  vector<vector<double>> final_path = replay_path_planner.get_replayed_path(ego_state, global_route);
+  vector<vector<double>> final_path = replay_path_planner.get_replayed_path(current_pose, global_route);
 
   while(ros::ok()) {
     ////////////////////////////////////////////////////////////////////////////
@@ -101,7 +109,7 @@ int main(int argc, char **argv) {
     ////////////////////////////////////////////////////////////////////////////
     double current_timestamp = ros::Time::now().toSec();
     if(current_timestamp - prev_timestamp > 1.0 && !global_route.empty()) {
-      final_path = replay_path_planner.get_replayed_path(ego_state, global_route);
+      final_path = replay_path_planner.get_replayed_path(current_pose, global_route);
       // final_path = replay_path_planner.get_interpolated_path(final_path);
       prev_timestamp = current_timestamp;
     }
@@ -131,7 +139,7 @@ int main(int argc, char **argv) {
       geometry_msgs::PoseStamped pose;
       pose.pose.position.x = final_path[i][0];
       pose.pose.position.y = final_path[i][1];
-      pose.pose.position.z = ego_z + 1.0;
+      pose.pose.position.z = current_z + 1.0;
 
       geometry_msgs::Quaternion quat = tf::createQuaternionMsgFromYaw(final_path[i][2]);
       pose.pose.orientation = quat;

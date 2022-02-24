@@ -16,5 +16,4 @@
     <param name="route_range" value="$(arg route_range)" />
     <param name="target_point" value="$(arg target_point)" />
   </node>
-
 </launch>

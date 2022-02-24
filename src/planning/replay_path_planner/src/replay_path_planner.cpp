@@ -18,9 +18,9 @@ vector<T> slice(vector<T> const &v, int m, int n) {
   return vec;
 }
 
-vector<vector<double>> ReplayPathPlanner::get_replayed_path(vector<double> ego_state, vector<vector<double>> global_route) {
-  double x = ego_state[0];
-  double y = ego_state[1];
+vector<vector<double>> ReplayPathPlanner::get_replayed_path(vector<double> current_pose, vector<vector<double>> global_route) {
+  double x = current_pose[0];
+  double y = current_pose[1];
   m_closest_index = get_closest_index(x, y, global_route);
   m_lookahead_index = get_lookahead_index(x, y, global_route, m_lookahead_distance);
   return slice(global_route, m_closest_index, m_lookahead_index);

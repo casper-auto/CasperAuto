@@ -3,7 +3,7 @@
   <name>carla_route_planner</name>
   <version>0.0.0</version>
   <description>The carla_route_planner package</description>
-  <maintainer email="carla.simulator@gmail.com">CARLA Simulator Team</maintainer>
+  <maintainer email="robotpengxu@gmail.com">Casper</maintainer>
   <license>MIT</license>
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>rospy</build_depend>

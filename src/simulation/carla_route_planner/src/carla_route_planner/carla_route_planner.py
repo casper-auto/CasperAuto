@@ -51,7 +51,7 @@ class CarlaToRosWaypointConverter(object):
         self.role_name = rospy.get_param('~role_name', 'ego_vehicle')
         self.route_range = float(rospy.get_param('~route_range', '50.0'))
         self.final_plan_publisher = rospy.Publisher(
-            '/region/global_route', Path, queue_size=10, latch=True)
+            '/casper_auto/global_route', Path, queue_size=10, latch=True)
 
         self.actor_spawnpoint = None
         # check argument and set spawn_point
@@ -190,7 +190,7 @@ class CarlaToRosWaypointConverter(object):
         # start_location = self.ego_vehicle.get_location()
 
         start_waypoint = self.map.get_waypoint(start_location)
-        
+
         if self.target_set:
             goal_location = self.actor_target_location
         else:
