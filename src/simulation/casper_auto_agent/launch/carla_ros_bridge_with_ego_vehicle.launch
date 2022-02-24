@@ -42,6 +42,6 @@
     <arg name='role_name' value='$(arg role_name)'/>
   </include>
 
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find casper_auto_agent)/rviz/demo.rviz"/>
+  <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find casper_auto_agent)/rviz/demo.rviz"/> -->
 
 </launch>

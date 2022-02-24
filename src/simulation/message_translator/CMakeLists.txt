@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(region_of_interest)
+project(message_translator)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>region_of_interest</name>
+  <name>message_translator</name>
   <version>0.0.0</version>
-  <description>The region_of_interest package</description>
+  <description>The message_translator package</description>
 
-  <maintainer email="robotpengxu@gmail.com">pxu</maintainer>
+  <maintainer email="robotpengxu@gmail.com">Casper</maintainer>
 
   <license>TODO</license>
 

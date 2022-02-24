@@ -17,8 +17,7 @@ def global_to_local(ref_orig, orientation, p):
     s = math.sin(-orientation)
     c = math.cos(-orientation)
 
-    out = Point2D(delta.x * c - delta.y * s,
-    delta.x * s + delta.y * c)
+    out = Point2D(delta.x * c - delta.y * s, delta.x * s + delta.y * c)
 
     return out
 

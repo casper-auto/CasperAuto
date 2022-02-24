@@ -31,6 +31,11 @@ catkin init --workspace catkin_ws
 cd catkin_ws
 wstool init src $ROSINSTALLFILE
 
+# apply git patch in ros-bridge
+cp script/update_ros_bridge.patch catkin_ws/src/carla-ros-bridge/
+cd catkin_ws/src/carla-ros-bridge && git apply update_ros_bridge.patch
+cd ../../..
+
 # Create simbolic link of the packages in src
 echo "Creating simbolic link of the packages..."
 cd src

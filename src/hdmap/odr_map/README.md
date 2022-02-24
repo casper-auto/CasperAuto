@@ -64,6 +64,7 @@ $ roslaunch odr_map service_node.launch
 ```
 
 ## How to running the Viewer
+
 1. Run viewer
 ```
 $ cd ${CATKIN_WS}
@@ -74,5 +75,3 @@ $ roslaunch odr_map test_node.launch
 Please click "Path Visualiser" button in the RVIZ widow menu ber.
 And mouce over the path in the RVIZ view. You can see the detail information of path.
 ```
-
-

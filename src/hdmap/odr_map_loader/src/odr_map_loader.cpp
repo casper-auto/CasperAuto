@@ -276,7 +276,7 @@ int main(int argc, char** argv) {
   ////////////////////////////////////////////////////////////////////////////
   ros::Duration(1.0).sleep();
 
-  boost::shared_ptr<std_msgs::String const> shared_map_msg = ros::topic::waitForMessage<std_msgs::String>("/carla/ego_vehicle/opendrive_map", nh);
+  boost::shared_ptr<std_msgs::String const> shared_map_msg = ros::topic::waitForMessage<std_msgs::String>("/carla/map", nh);
   std::string xml_str = shared_map_msg->data;
 
   ////////////////////////////////////////////////////////////////////////////
