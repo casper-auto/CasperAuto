@@ -1,0 +1,4 @@
+<launch>
+  <arg name="output" default="log"/>
+  <node pkg="autoware_health_checker" type="health_aggregator" name="health_aggregator" output="$(arg output)" respawn="true" respawn_delay="0" />
+</launch>

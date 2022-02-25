@@ -1,0 +1,7 @@
+Header header
+bool use_decision_maker
+float32 lateral_accel_limit
+float32 lateral_jerk_limit
+float32 lowpass_gain_linear_x
+float32 lowpass_gain_angular_z
+float32 lowpass_gain_steering_angle

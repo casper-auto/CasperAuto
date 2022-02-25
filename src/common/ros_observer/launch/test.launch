@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="ros_observer" type="ros_observer" name="ros_observer" output="screen" respawn="false" respawn_delay="0" />
+    <arg name="shm_vmon_enabled" default="false"/>
+    <param name="shm_vmon_enabled" value="$(arg shm_vmon_enabled)"/>
+</launch>

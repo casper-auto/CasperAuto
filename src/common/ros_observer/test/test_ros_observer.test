@@ -1,0 +1,3 @@
+<launch>
+  <test test-name="test-ros_observer" pkg="ros_observer" type="test_ros_observer" name="test" />
+</launch>

@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="ros_observer" type="ros_observer" name="ros_observer" output="log" respawn="false" />
+</launch>

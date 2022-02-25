@@ -61,6 +61,13 @@ Visualization Manager:
       Unreliable: false
       Value: false
       Visibility:
+        "":
+          Marker: true
+          NextTarget: true
+          NextWaypoint: true
+          SearchCircle: true
+          TrajectoryCircle: true
+          Value: true
         Grid: true
         HDMap:
           BasePaths: true
@@ -70,14 +77,16 @@ Visualization Manager:
           Stoplines: true
           Value: true
         Perception:
-          "": true
+          DetectedObjectArray: true
           Value: true
         Planning:
-          "": true
-          MarkerArray: true
+          FinalPath: true
+          GeneratdPaths: true
+          GlobalRoute: true
+          GlobalRouteMarker: true
           Value: true
         Prediction:
-          Prediction Paths: true
+          "": true
           Value: true
         Sensors:
           CarlaObjects: true
@@ -86,10 +95,12 @@ Visualization Manager:
         System:
           CurrentPose: true
           CurrentSpeed: true
+          CurrentVelocity: true
           RobotModel: true
           Value: true
         TrafficSignal:
-          "": true
+          StopBarrierDisplay: true
+          StopTimerDisplay: true
           Value: true
         Value: false
       Zoom Factor: 1
@@ -109,6 +120,21 @@ Visualization Manager:
           Shaft Radius: 0.05000000074505806
           Shape: Arrow
           Topic: /casper_auto/current_pose
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Angular Arrow Scale: 2
+          Angular Color: 204; 204; 51
+          Arrow Width: 0.5
+          Class: rviz/TwistStamped
+          Enabled: true
+          Hide Small Values: true
+          History Length: 1
+          Linear Arrow Scale: 2
+          Linear Color: 204; 51; 51
+          Name: CurrentVelocity
+          Queue Size: 10
+          Topic: /casper_auto/current_velocity
           Unreliable: false
           Value: true
         - Buffer length: 100
@@ -351,18 +377,19 @@ Visualization Manager:
           Name: GlobalRouteMarker
           Namespaces:
             global_lane_array_marker: true
+            global_lane_waypoint_orientation_marker: true
           Queue Size: 100
           Value: true
         - Alpha: 5
           Buffer Length: 5
           Class: rviz/Path
-          Color: 25; 255; 255
-          Enabled: true
+          Color: 255; 192; 203
+          Enabled: false
           Head Diameter: 0.800000011920929
           Head Length: 0.30000001192092896
           Length: 0.30000001192092896
           Line Style: Billboards
-          Line Width: 0.5
+          Line Width: 0.20000000298023224
           Name: FinalPath
           Offset:
             X: 0
@@ -376,7 +403,7 @@ Visualization Manager:
           Shaft Length: 0.30000001192092896
           Topic: /casper_auto/final_path
           Unreliable: false
-          Value: true
+          Value: false
         - Class: rviz/MarkerArray
           Enabled: true
           Marker Topic: /casper_auto/generated_paths_marker
@@ -387,6 +414,58 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: Planning
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /line_point_mark
+          Name: Marker
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /trajectory_circle_mark
+          Name: Marker
+          Namespaces:
+            trajectory_circle_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /next_target_mark
+          Name: NextTarget
+          Namespaces:
+            next_target_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /search_circle_mark
+          Name: SearchCircle
+          Namespaces:
+            search_radius_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /trajectory_circle_mark
+          Name: TrajectoryCircle
+          Namespaces:
+            trajectory_circle_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /next_waypoint_mark
+          Name: NextWaypoint
+          Namespaces:
+            next_waypoint_marker: true
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: Control
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -415,7 +494,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 17.119518280029297
+      Distance: 37.35918426513672
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -431,9 +510,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4103982150554657
+      Pitch: 0.7003985047340393
       Target Frame: <Fixed Frame>
-      Yaw: 3.145397186279297
+      Yaw: 3.160400390625
     Saved: ~
 Window Geometry:
   Displays:

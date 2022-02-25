@@ -10,7 +10,7 @@ import tf
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from std_msgs.msg import Float32
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import Pose, Pose2D, PoseStamped
+from geometry_msgs.msg import Pose, Pose2D, PoseStamped, TwistStamped
 from derived_object_msgs.msg import Object, ObjectArray
 
 # utils
@@ -63,6 +63,7 @@ class MessageTranslator(object):
         Publishers
         '''
         self.current_pose_pub = rospy.Publisher('/casper_auto/current_pose', PoseStamped, queue_size=10)
+        self.current_velocity_pub = rospy.Publisher('/casper_auto/current_velocity', TwistStamped, queue_size=10)
         self.current_speed_pub = rospy.Publisher('/casper_auto/current_speed', Float32, queue_size=10)
         self.detected_object_array_pub = rospy.Publisher('/casper_auto/detected_objects', ObjectArray, queue_size=10)
 
@@ -94,10 +95,19 @@ class MessageTranslator(object):
         Publish current pose in world frame
         '''
         self.current_pose = PoseStamped()
-        self.current_pose.header.stamp = rospy.get_rostime()
+        # self.current_pose.header.stamp = rospy.get_rostime()
         self.current_pose.header.frame_id = self.world_frame
         self.current_pose.pose = msg.pose.pose
         self.current_pose_pub.publish(self.current_pose)
+
+        '''
+        Publish current velocity
+        '''
+        self.current_velocity = TwistStamped()
+        # self.current_velocity.header.stamp = rospy.get_rostime()
+        self.current_velocity.header.frame_id = self.world_frame
+        self.current_velocity.twist = msg.twist.twist
+        self.current_velocity_pub.publish(self.current_velocity)
 
     def carla_speedometer_callback(self, msg):
         rospy.loginfo('Received carla speedometer speed in message translator.')
