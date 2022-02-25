@@ -3,7 +3,7 @@
   <robot name="dbw_mkz" xmlns:xacro="http://www.ros.org/wiki/xacro">
     <xacro:arg name="dae_file" default="$(find vehicle_description)/meshes/mkz_17/body.dae"/>
 
-    <link name="base_footprint">
+    <link name="ego_vehicle">
     </link>
 
     <link name="base_link">
@@ -128,8 +128,8 @@
     </link>
 
     <joint name="base_link_joint" type="fixed">
-      <origin xyz="0 0 0.33" rpy="0 0 0"/>
-      <parent link="base_footprint"/>
+      <origin xyz="-1.44 0 0.33" rpy="0 0 0"/>
+      <parent link="ego_vehicle"/>
       <child link="base_link"/>
     </joint>
 

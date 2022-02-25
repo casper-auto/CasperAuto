@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <launch>
-
   <param name="robot_description" command="$(find xacro)/xacro $(find vehicle_description)/urdf/mkz.urdf.xacro" />
 
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
@@ -9,5 +8,4 @@
   </node>
 
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
-
 </launch>

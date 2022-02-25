@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find vehicle_description)/launch/mkz.launch">
+  </include>
+</launch>

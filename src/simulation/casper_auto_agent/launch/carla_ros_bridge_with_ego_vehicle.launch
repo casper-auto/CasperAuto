@@ -38,10 +38,14 @@
     <arg name="spawn_sensors_only" value="false"/>
   </include>
 
+  <include file="$(find vehicle_description)/launch/vehicle.launch" />
+
   <include file="$(find carla_manual_control)/launch/carla_manual_control.launch">
     <arg name='role_name' value='$(arg role_name)'/>
   </include>
 
-  <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(find casper_auto_agent)/rviz/demo.rviz"/> -->
+  <include file="$(find odr_map_loader)/launch/odr_map_loader.launch" />
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find casper_auto_agent)/rviz/demo.rviz"/>
 
 </launch>

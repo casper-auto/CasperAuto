@@ -37,6 +37,8 @@
     <arg name="spawn_sensors_only" value="false"/>
   </include>
 
+  <include file="$(find vehicle_description)/launch/vehicle_description.launch" />
+
   <include file="$(find carla_manual_control)/launch/carla_manual_control.launch">
     <arg name='role_name' value='$(arg role_name)'/>
   </include>
