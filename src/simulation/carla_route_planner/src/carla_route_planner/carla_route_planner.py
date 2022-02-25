@@ -22,9 +22,11 @@ import random
 import rospy
 import tf
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, ColorRGBA
 from nav_msgs.msg import Path, Odometry
+from geometry_msgs.msg import Point
 from geometry_msgs.msg import Pose, PoseStamped, TwistStamped
+from visualization_msgs.msg import Marker, MarkerArray
 from carla_msgs.msg import CarlaWorldInfo
 
 import carla
@@ -33,7 +35,7 @@ from agents.navigation.global_route_planner import GlobalRoutePlanner
 from agents.navigation.global_route_planner_dao import GlobalRoutePlannerDAO
 
 
-class CarlaToRosWaypointConverter(object):
+class CarlaRoutePlanner(object):
 
     """
     This class generates a plan of waypoints to follow.
@@ -50,8 +52,10 @@ class CarlaToRosWaypointConverter(object):
         self.ego_vehicle = None
         self.role_name = rospy.get_param('~role_name', 'ego_vehicle')
         self.route_range = float(rospy.get_param('~route_range', '50.0'))
-        self.final_plan_publisher = rospy.Publisher(
+        self.global_route_publisher = rospy.Publisher(
             '/casper_auto/global_route', Path, queue_size=10, latch=True)
+        self.global_route_markers_publisher = rospy.Publisher(
+            '/casper_auto/global_route_markers', MarkerArray, queue_size=10, latch=True)
 
         self.actor_spawnpoint = None
         # check argument and set spawn_point
@@ -76,7 +80,7 @@ class CarlaToRosWaypointConverter(object):
             self.actor_spawnpoint = pose
 
         # check argument and set spawn_point
-        self.target_set = False
+        self.goal_set = False
         target_point_param = rospy.get_param('~target_point')
         if target_point_param:
             rospy.loginfo("Using ros parameter for spawnpoint: {}".format(target_point_param))
@@ -85,16 +89,15 @@ class CarlaToRosWaypointConverter(object):
                 raise ValueError("Invalid spawnpoint '{}'".format(target_point_param))
             else:
                 self.actor_target_location = carla.Location(float(target_point[0]), -float(target_point[1]), float(target_point[2]))
-                self.target_set = True
+                self.goal_set = True
 
         self.start = None # carla.Location()
-
-        self.final_plan_route = None
-
+        self.goal = None
+        self.global_route = None
         self.lane_fixed = False
 
-        self.ego_odom_subscriber = rospy.Subscriber(
-            "/carla/{}/odometry".format(self.role_name), Odometry, self.on_odom, queue_size=10)
+        self.current_pose_subscriber = rospy.Subscriber(
+            "/casper_auto/current_pose", PoseStamped, self.on_current_pose, queue_size=10)
 
         self._update_lock = threading.Lock()
 
@@ -102,21 +105,20 @@ class CarlaToRosWaypointConverter(object):
         rospy.loginfo("Waiting for ego vehicle...")
         self.world.on_tick(self.find_ego_vehicle_actor)
 
-    def on_odom(self, odom):
-        # rospy.loginfo("Odometry: x={}, y={}, z={}".format(
-        #               odom.pose.pose.position.x,
-        #               odom.pose.pose.position.y,
-        #               odom.pose.pose.position.z))
+    def on_current_pose(self, msg):
+        # rospy.loginfo("Pose: x={}, y={}, z={}".format(
+        #               msg.pose.position.x,
+        #               msg.pose.position.y,
+        #               msg.pose.position.z))
 
-        pose = odom.pose.pose
+        pose = msg.pose
 
         if self.actor_spawnpoint:
-          pose = self.actor_spawnpoint
+            pose = self.actor_spawnpoint
 
         if not self.lane_fixed:
             self.lane_fixed = True
 
-            # self.odom = odom
             carla_start = carla.Transform()
             carla_start.location.x = pose.position.x
             carla_start.location.y = -pose.position.y
@@ -134,7 +136,8 @@ class CarlaToRosWaypointConverter(object):
             self.start = carla_start
             self.reroute()
 
-        self.publish_final_plan()
+        self.publish_global_route()
+        self.publish_global_route_marker()
 
     def reroute(self):
         """
@@ -142,9 +145,9 @@ class CarlaToRosWaypointConverter(object):
         """
         if self.ego_vehicle is None or self.start is None:
             # no ego vehicle, remove route if published
-            self.final_plan_route = None
+            self.global_route = None
         else:
-            self.final_plan_route = self.calculate_route(self.start)
+            self.global_route = self.calculate_route(self.start)
 
     def find_ego_vehicle_actor(self, _):
         """
@@ -191,7 +194,7 @@ class CarlaToRosWaypointConverter(object):
 
         start_waypoint = self.map.get_waypoint(start_location)
 
-        if self.target_set:
+        if self.goal_set:
             goal_location = self.actor_target_location
         else:
             goal_waypoint = random.choice(start_waypoint.next(self.route_range))
@@ -207,15 +210,15 @@ class CarlaToRosWaypointConverter(object):
 
         return lane_keep_route
 
-    def publish_final_plan(self):
+    def publish_global_route(self):
         """
         Publish the ROS message containing the waypoints
         """
         path = Path()
         path.header.frame_id = "map"
         # path.header.stamp = rospy.Time.now()
-        if self.final_plan_route is not None:
-            for wp in self.final_plan_route:
+        if self.global_route is not None:
+            for wp in self.global_route:
                 pose = PoseStamped()
                 pose.pose.position.x = wp[0].transform.location.x
                 pose.pose.position.y = -wp[0].transform.location.y
@@ -229,8 +232,90 @@ class CarlaToRosWaypointConverter(object):
                 pose.pose.orientation.w = quaternion[3]
                 path.poses.append(pose)
 
-        self.final_plan_publisher.publish(path)
+        self.global_route_publisher.publish(path)
         # rospy.loginfo("Published {} waypoints in the global route.".format(len(path.poses)))
+
+    def create_global_waypoint_array_marker(self, color):
+        waypoint_marker = Marker()
+
+        waypoint_marker.header.frame_id = "map"
+        # waypoint_marker.header.stamp = rospy.Time.now()
+        waypoint_marker.ns = "global_lane_array_marker"
+        waypoint_marker.type = Marker.LINE_STRIP
+        waypoint_marker.action = Marker.ADD
+        waypoint_marker.scale.x = 0.75
+        waypoint_marker.scale.y = 0.75
+        waypoint_marker.color = color
+        waypoint_marker.frame_locked = False
+
+        waypoint_marker.id = 1
+        waypoint_marker.pose.orientation.w = 1.0
+
+        if self.global_route is not None:
+            for wp in self.global_route:
+                point = Point()
+                point.x = wp[0].transform.location.x
+                point.y = -wp[0].transform.location.y
+                point.z = wp[0].transform.location.z
+                waypoint_marker.points.append(point)
+
+        return waypoint_marker
+
+    def create_global_waypoint_array_orientation_marker(self):
+        marker_array = MarkerArray()
+
+        if self.global_route is not None:
+            count = 1
+            for wp in self.global_route:
+                pose = Pose()
+                pose.position.x = wp[0].transform.location.x
+                pose.position.y = -wp[0].transform.location.y
+                pose.position.z = wp[0].transform.location.z
+                quaternion = tf.transformations.quaternion_from_euler(
+                    0, 0, -math.radians(wp[0].transform.rotation.yaw))
+                pose.orientation.x = quaternion[0]
+                pose.orientation.y = quaternion[1]
+                pose.orientation.z = quaternion[2]
+                pose.orientation.w = quaternion[3]
+
+                waypoint_marker = Marker()
+                waypoint_marker.header.frame_id = "map"
+                # waypoint_marker.header.stamp = rospy.Time.now()
+                waypoint_marker.type = Marker.ARROW
+                waypoint_marker.action = Marker.ADD
+                waypoint_marker.scale.x = 0.6
+                waypoint_marker.scale.y = 0.2
+                waypoint_marker.scale.z = 0.1
+                waypoint_marker.color.r = 1.0
+                waypoint_marker.color.a = 1.0
+                # waypoint_marker.frame_locked = False
+                waypoint_marker.ns = "global_lane_waypoint_orientation_marker"
+                waypoint_marker.id = count
+                waypoint_marker.pose = pose
+                waypoint_marker.color.r = 0.0
+                waypoint_marker.color.g = 1.0
+                waypoint_marker.color.b = 0.0
+                marker_array.markers.append(waypoint_marker)
+
+                count += 1
+
+        return marker_array
+
+    def publish_global_route_marker(self):
+        total_color = ColorRGBA()
+        total_color.r = 0
+        total_color.g = 0.7
+        total_color.b = 1.0
+        total_color.a = 0.9
+
+        marker_array = MarkerArray()
+        marker = self.create_global_waypoint_array_marker(total_color)
+        temp_array = self.create_global_waypoint_array_orientation_marker()
+        marker_array.markers.append(marker)
+        for mk in temp_array.markers:
+            marker_array.markers.append(mk)
+
+        self.global_route_markers_publisher.publish(marker_array)
 
 
 def main():
@@ -261,7 +346,7 @@ def main():
 
         rospy.loginfo("Connected to Carla.")
 
-        waypointConverter = CarlaToRosWaypointConverter(carla_world)
+        waypointConverter = CarlaRoutePlanner(carla_world)
 
         rospy.spin()
         del waypointConverter
