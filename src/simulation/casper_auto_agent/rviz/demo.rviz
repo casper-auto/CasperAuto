@@ -3,7 +3,8 @@ Panels:
     Help Height: 0
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /Planning1/FinalPathMarker1/Status1
       Splitter Ratio: 0.4446679949760437
     Tree Height: 771
   - Class: rviz/Selection
@@ -61,12 +62,8 @@ Visualization Manager:
       Unreliable: false
       Value: false
       Visibility:
-        "":
-          Marker: true
-          NextTarget: true
-          NextWaypoint: true
-          SearchCircle: true
-          TrajectoryCircle: true
+        Control:
+          "": true
           Value: true
         Grid: true
         HDMap:
@@ -77,13 +74,11 @@ Visualization Manager:
           Stoplines: true
           Value: true
         Perception:
-          DetectedObjectArray: true
+          "": true
           Value: true
         Planning:
-          FinalPath: true
-          GeneratdPaths: true
-          GlobalRoute: true
-          GlobalRouteMarker: true
+          "": true
+          FinalPathMarker: true
           Value: true
         Prediction:
           "": true
@@ -99,8 +94,7 @@ Visualization Manager:
           RobotModel: true
           Value: true
         TrafficSignal:
-          StopBarrierDisplay: true
-          StopTimerDisplay: true
+          "": true
           Value: true
         Value: false
       Zoom Factor: 1
@@ -406,6 +400,16 @@ Visualization Manager:
           Value: false
         - Class: rviz/MarkerArray
           Enabled: true
+          Marker Topic: /casper_auto/final_path_marker
+          Name: FinalPathMarker
+          Namespaces:
+            local_path_marker: true
+            local_point_marker: true
+            local_waypoint_velocity: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: true
           Marker Topic: /casper_auto/generated_paths_marker
           Name: GeneratdPaths
           Namespaces:
@@ -429,7 +433,7 @@ Visualization Manager:
           Marker Topic: /trajectory_circle_mark
           Name: Marker
           Namespaces:
-            trajectory_circle_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -437,7 +441,7 @@ Visualization Manager:
           Marker Topic: /next_target_mark
           Name: NextTarget
           Namespaces:
-            next_target_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -445,7 +449,7 @@ Visualization Manager:
           Marker Topic: /search_circle_mark
           Name: SearchCircle
           Namespaces:
-            search_radius_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -453,7 +457,7 @@ Visualization Manager:
           Marker Topic: /trajectory_circle_mark
           Name: TrajectoryCircle
           Namespaces:
-            trajectory_circle_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -461,7 +465,7 @@ Visualization Manager:
           Marker Topic: /next_waypoint_mark
           Name: NextWaypoint
           Namespaces:
-            next_waypoint_marker: true
+            {}
           Queue Size: 100
           Value: true
       Enabled: true
@@ -494,7 +498,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 37.35918426513672
+      Distance: 25.15346908569336
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -510,9 +514,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7003985047340393
+      Pitch: 0.6603984236717224
       Target Frame: <Fixed Frame>
-      Yaw: 3.160400390625
+      Yaw: 3.1503994464874268
     Saved: ~
 Window Geometry:
   Displays:
