@@ -44,7 +44,8 @@ MotionController::MotionController(string control_method,
                                    double lookahead_dist_mpc,
                                    double lookahead_t_mpc) {
   m_vars;
-  m_ego_state = {0.0, 0.0, 0.0};
+  m_current_pose = {0.0, 0.0, 0.0};
+  m_current_velocity = {0.0, 0.0, 0.0};
   m_desired_speed = 0;
   m_current_timestamp = 0.0;
   m_start_control_loop = false;
@@ -55,9 +56,11 @@ MotionController::MotionController(string control_method,
   m_lookahead_dist_mpc = lookahead_dist_mpc;
 }
 
-void MotionController::update_values(vector<double> ego_state,
+void MotionController::update_values(vector<double>& current_pose,
+                                     vector<double>& current_velocity,
                                      double timestamp) {
-  m_ego_state = ego_state;
+  m_current_pose = current_pose;
+  m_current_velocity = current_velocity;
   m_current_timestamp = timestamp;
 }
 
@@ -80,7 +83,7 @@ void MotionController::update_waypoints(vector<vector<double>>& waypoints) {
     m_waypoints[i] = tmp;
   }
 
-  m_closest_index = get_closest_index(waypoints, m_ego_state);
+  m_closest_index = get_closest_index(waypoints, m_current_pose);
 }
 
 int MotionController::get_closest_index(vector<vector<double>> waypoints,
@@ -305,10 +308,10 @@ void MotionController::update_controls(double lag_throttle, double lag_brake,
   //////////////////////////////////////////////////////////////////////////////
   // Retrieve Data
   //////////////////////////////////////////////////////////////////////////////
-  double x = m_ego_state[0];
-  double y = m_ego_state[1];
-  double yaw = m_ego_state[2];
-  double v = m_ego_state[3];
+  double x = m_current_pose[0];
+  double y = m_current_pose[1];
+  double yaw = m_current_pose[2];
+  double v = m_current_velocity[2];
 
   update_desired_speed();
 

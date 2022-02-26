@@ -34,7 +34,7 @@ class MotionController {
   MotionController(string control_method, double lookahead_dist_mpc,
                    double lookahead_t_mpc);
 
-  void update_values(vector<double> ego_state, double timestamp);
+  void update_values(vector<double>& current_pose, vector<double>& current_velocity, double timestamp);
 
   void update_desired_speed();
 
@@ -68,7 +68,8 @@ class MotionController {
 
   deque<double> m_buffer_pid;
 
-  vector<double> m_ego_state;
+  vector<double> m_current_pose;
+  vector<double> m_current_velocity;
 
   double m_desired_speed;
 

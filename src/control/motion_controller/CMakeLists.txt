@@ -3,8 +3,6 @@ project(motion_controller)
 
 add_compile_options(-std=c++11)
 
-#set(CMAKE_CXX_CPPLINT "/usr/local/bin/cpplint")
-
 find_package(catkin REQUIRED COMPONENTS
   rospy
   roscpp
@@ -22,8 +20,6 @@ catkin_package(
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
 )
-
-include(cmake/cpplint.cmake)
 
 include_directories(
   include
@@ -44,6 +40,3 @@ add_dependencies(motion_controller
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
-
-cpplint_add_subdirectory("${PROJECT_SOURCE_DIR}/include")
-cpplint_add_subdirectory("${PROJECT_SOURCE_DIR}/src")

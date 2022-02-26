@@ -20,15 +20,16 @@ using namespace std;
 
 const double INTERP_DISTANCE_RES = 0.01;
 
-vector<double> ego_state(4);
-double ego_z = 0;
+vector<double> current_pose(3); // x, y, yaw
+vector<double> current_velocity(3); // vx, vy, magnitude
+double current_z = 0;
 vector<vector<double>> final_waypoints;
-vector<double> prev_p = {0, 0};
+vector<double> prev_p(2);
 
-void egoOdometryCallback(const nav_msgs::Odometry::ConstPtr& msg) {
-  // ROS_INFO("ego odometry got ...");
+void currentPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
+  // ROS_INFO("Received current pose in motion controller ...");
 
-  geometry_msgs::Quaternion geo_quat = msg->pose.pose.orientation;
+  geometry_msgs::Quaternion geo_quat = msg->pose.orientation;
 
   // the incoming geometry_msgs::Quaternion is transformed to a tf::Quaterion
   tf::Quaternion quat;
@@ -38,47 +39,30 @@ void egoOdometryCallback(const nav_msgs::Odometry::ConstPtr& msg) {
   double roll, pitch, yaw;
   tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
 
-  ego_state[0] = msg->pose.pose.position.x;
-  ego_state[1] = msg->pose.pose.position.y;
-  ego_state[2] = yaw;
-  double vx = msg->twist.twist.linear.x;
-  double vy = msg->twist.twist.linear.y;
-  ego_state[3] = std::hypot(vx, vy);
+  current_pose[0] = msg->pose.position.x;
+  current_pose[1] = msg->pose.position.y;
+  current_pose[2] = yaw;
 
-  ego_z = msg->pose.pose.position.z;
+  current_z = msg->pose.position.z;
 
-  // ROS_INFO("Ego state: x: %.2f, y: %.2f, yaw: %.2f, vel: %.2f", ego_state[0],
-  // ego_state[1], ego_state[2], ego_state[3]);
+  // ROS_INFO("Current pose: x: %.2f, y: %.2f, yaw: %.2f",
+  //     current_pose[0], current_pose[1], current_pose[2]);
 }
 
-void egoStateCallback(const nav_msgs::Odometry::ConstPtr& msg) {
-  // ROS_INFO("ego state got ...");
+void currentVelocityCallback(const geometry_msgs::TwistStamped::ConstPtr& msg) {
+  // ROS_INFO("Received current velocity in motion controller ...");
 
-  geometry_msgs::Quaternion geo_quat = msg->pose.pose.orientation;
+  current_velocity[0] = msg->twist.linear.x;
+  current_velocity[1] = msg->twist.linear.y;
+  current_velocity[2] = std::hypot(current_velocity[0], current_velocity[1]);
 
-  // the incoming geometry_msgs::Quaternion is transformed to a tf::Quaterion
-  tf::Quaternion quat;
-  tf::quaternionMsgToTF(geo_quat, quat);
-
-  // the tf::Quaternion has a method to acess roll pitch and yaw
-  double roll, pitch, yaw;
-  tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
-
-  ego_state[0] = msg->pose.pose.position.x;
-  ego_state[1] = msg->pose.pose.position.y;
-  ego_state[2] = yaw;
-  double vx = msg->twist.twist.linear.x;
-  double vy = msg->twist.twist.linear.y;
-  ego_state[3] = std::hypot(vx, vy);
-
-  ego_z = msg->pose.pose.position.z;
-
-  // ROS_INFO("Ego state: x: %.2f, y: %.2f, yaw: %.2f, vel: %.2f", ego_state[0],
-  // ego_state[1], ego_state[2], ego_state[3]);
+  // ROS_INFO("Current velocity: vx: %.2f, vy: %.2f",
+  //     current_velocity[0], current_velocity[1]);
 }
 
 void finalWaypointsCallback(const casper_auto_msgs::WaypointArray::ConstPtr& msg) {
-  // ROS_INFO("final waypoints plan got ...");
+  // ROS_INFO("Received final waypoints in motion controller ...");
+
   ////////////////////////////////////////////////////////////////////////////
   // process final path
   ////////////////////////////////////////////////////////////////////////////
@@ -90,12 +74,13 @@ void finalWaypointsCallback(const casper_auto_msgs::WaypointArray::ConstPtr& msg
     p[2] = msg->waypoints[i].twist.twist.linear.x;
     final_waypoints[i] = p;
   }
+
   // ROS_INFO("First waypoint: x: %.2f, y: %.2f", final_waypoints[0][0],
-  // final_waypoints[0][1]);
+  //     final_waypoints[0][1]);
 }
 
 int main(int argc, char** argv) {
-  ros::init(argc, argv, "motion_planner");
+  ros::init(argc, argv, "motion_controller");
   ros::NodeHandle n("~");
 
   //////////////////////////////////////////////////////////////////////////////
@@ -146,14 +131,16 @@ int main(int argc, char** argv) {
   //////////////////////////////////////////////////////////////////////////////
   // ROS Subscriber and Publisher
   //////////////////////////////////////////////////////////////////////////////
-  ros::Subscriber ego_state_sub =
-      n.subscribe("/casper_auto/localization/odometry", 1000, egoStateCallback);
+  ros::Subscriber current_pose_sub =
+      n.subscribe("/casper_auto/current_pose", 10, currentPoseCallback);
+  ros::Subscriber current_velocity_sub =
+      n.subscribe("/casper_auto/current_velocity", 10, currentVelocityCallback);
   ros::Subscriber final_waypoints_sub =
-      n.subscribe("/casper_auto/planning/final_waypoints", 1000, finalWaypointsCallback);
+      n.subscribe("/casper_auto/final_waypoints", 10, finalWaypointsCallback);
 
   ros::Publisher vehicle_control_cmd_pub =
       n.advertise<carla_msgs::CarlaEgoVehicleControl>(
-          "/carla/" + role_name + "/vehicle_control_cmd", 1000);
+          "/carla/" + role_name + "/vehicle_control_cmd", 10);
 
   MotionController mc(control_method, lookahead_dist_mpc, lookahead_t_mpc);
 
@@ -171,7 +158,7 @@ int main(int argc, char** argv) {
     vector<vector<double>> wp_interp;
 
     // if ego car is on the air, re-initialize pid
-    double dist = hypot(ego_state[0] - prev_p[0], ego_state[1] - prev_p[1]);
+    double dist = hypot(current_pose[0] - prev_p[0], current_pose[1] - prev_p[1]);
 
     if (dist > 10.0) {
       mc.reset_all_vars();
@@ -179,8 +166,8 @@ int main(int argc, char** argv) {
       std::cout << "Restarting ego car" << std::endl;
     }
 
-    prev_p[0] = ego_state[0];
-    prev_p[1] = ego_state[1];
+    prev_p[0] = current_pose[0];
+    prev_p[1] = current_pose[1];
 
     if (final_waypoints.size() > 1) {
       ////////////////////////////////////////////////////////////////////////////
@@ -250,7 +237,7 @@ int main(int argc, char** argv) {
     ////////////////////////////////////////////////////////////////////////////
     if (wp_interp.size() > 1) {
       mc.update_waypoints(wp_interp);
-      mc.update_values(ego_state, current_timestamp);
+      mc.update_values(current_pose, current_velocity, current_timestamp);
       mc.update_controls(lag_throttle, lag_brake, lag_steering, frequency_rate,
                          add_latency);
       cmd = mc.get_commands();
