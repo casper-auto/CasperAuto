@@ -18,7 +18,6 @@ using namespace std;
 
 vector<double> current_pose(3);
 double current_speed;
-double current_z = 0;
 vector<vector<double>> global_route;
 double cruise_speed = 5.0;
 
@@ -43,8 +42,6 @@ void currentPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
   current_pose[1] = msg->pose.position.y;
   current_pose[2] = yaw;
 
-  current_z = msg->pose.position.z;
-
   // ROS_INFO("Current pose: x: %.2f, y: %.2f, yaw: %.2f", current_pose[0], current_pose[1], current_pose[2]);
 }
 
@@ -64,6 +61,7 @@ void globalRouteCallback(const nav_msgs::Path::ConstPtr& msg) {
   for(int i = 0; i < msg->poses.size(); i++) {
     double x = msg->poses[i].pose.position.x;
     double y = msg->poses[i].pose.position.y;
+    double z = msg->poses[i].pose.position.z;
 
     geometry_msgs::Quaternion geo_quat = msg->poses[i].pose.orientation;
     // the incoming geometry_msgs::Quaternion is transformed to a tf::Quaterion
@@ -75,12 +73,12 @@ void globalRouteCallback(const nav_msgs::Path::ConstPtr& msg) {
 
     // skip overlapped points
     if(global_route.size() == 0) {
-      global_route.push_back({x, y, yaw});
+      global_route.push_back({x, y, z, yaw});
     }
     else if ((global_route.size() > 0)
         && !(abs(x - global_route[global_route.size()-1][0]) < 0.001
              && abs(y - global_route[global_route.size()-1][1]) < 0.001)) {
-      global_route.push_back({x, y, yaw});
+      global_route.push_back({x, y, z, yaw});
     }
   }
   ROS_INFO("Received %d valid points in the global route.", int(global_route.size()));
@@ -144,7 +142,7 @@ int main(int argc, char **argv) {
       geometry_msgs::PoseStamped pose;
       pose.pose.position.x = final_path[i][0];
       pose.pose.position.y = final_path[i][1];
-      pose.pose.position.z = current_z + 1.0;
+      pose.pose.position.z = final_path[i][2];
 
       geometry_msgs::Quaternion quat = tf::createQuaternionMsgFromYaw(final_path[i][2]);
       pose.pose.orientation = quat;
@@ -173,13 +171,14 @@ int main(int argc, char **argv) {
     waypoint_marker.scale.x = 0.2;
     waypoint_marker.color = waypoint_color;
     waypoint_marker.frame_locked = true;
+    waypoint_marker.pose.orientation.w = 1.0;
 
     for (unsigned int i = 0; i < static_cast<int>(final_path.size()); i++)
     {
       geometry_msgs::Point point;
       point.x = final_path[i][0];
       point.y = final_path[i][1];
-      point.z = current_z + 0.2;
+      point.z = final_path[i][2] + 0.2;
       waypoint_marker.points.push_back(point);
     }
 
@@ -204,7 +203,8 @@ int main(int argc, char **argv) {
       velocity_marker.id = i;
       velocity_marker.pose.position.x = final_path[i][0];
       velocity_marker.pose.position.y = final_path[i][1];
-      velocity_marker.pose.position.z = current_z + 0.4;
+      velocity_marker.pose.position.z = final_path[i][2] + 0.4;
+      velocity_marker.pose.orientation.w = 1.0;
 
       // double to string
       std::ostringstream oss;
@@ -227,20 +227,19 @@ int main(int argc, char **argv) {
     waypoint_cube_marker.color.r = 1.0;
     waypoint_cube_marker.color.a = 1.0;
     waypoint_cube_marker.frame_locked = true;
+    waypoint_cube_marker.pose.orientation.w = 1.0;
 
     for (unsigned int i = 0; i < static_cast<int>(final_path.size()); i++)
     {
       geometry_msgs::Point point;
       point.x = final_path[i][0];
       point.y = final_path[i][1];
-      point.z = current_z + 0.6;
+      point.z = final_path[i][2] + 0.6;
       waypoint_cube_marker.points.push_back(point);
     }
     marker_array.markers.push_back(waypoint_cube_marker);
 
     final_path_marker_pub.publish(marker_array);
-    // final_path_marker_pub.publish(line_strip);
-    // final_path_marker_pub.publish(line_list);
 
     ////////////////////////////////////////////////////////////////////////////
     // ROS Spin
