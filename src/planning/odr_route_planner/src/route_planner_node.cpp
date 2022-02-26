@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
   ////////////////////////////////////////////////////////////////////////////
   boost::shared_ptr<std_msgs::String const> shared_map_msg =
       ros::topic::waitForMessage<std_msgs::String>(
-          "/carla/ego_vehicle/opendrive_map", nh);
+          "/carla/map", nh);
   std::string xml_str = shared_map_msg->data;
 
   /////////////////////////////////////////////////////////////////

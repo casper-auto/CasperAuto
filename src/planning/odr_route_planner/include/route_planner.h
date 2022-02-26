@@ -19,6 +19,7 @@
 #include <casper_auto_msgs/VehicleState.h>
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/Quaternion.h>
+#include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
@@ -50,9 +51,13 @@ private:
   // ros subscribers
   ros::Subscriber current_pose_sub_;
   ros::Subscriber waypoints_sub_;
+  ros::Subscriber goal_sub_;
 
   // msg
   nav_msgs::Path waypoints_;
+  bool waypoints_defined_;
+  geometry_msgs::Pose goal_;
+  bool goal_defined_;
   nav_msgs::Path global_route_;
 
   // map_parser
@@ -80,6 +85,8 @@ private:
   void currentPoseCallback(const geometry_msgs::PoseStamped::ConstPtr &msg);
 
   void waypointsCallback(const nav_msgs::Path::ConstPtr &msg);
+
+  void goalCallback(const geometry_msgs::PoseStamped::ConstPtr &msg);
 
   int getNearestPathIdx(geometry_msgs::Point &query_point);
 

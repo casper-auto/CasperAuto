@@ -18,15 +18,23 @@ RoutePlanner::RoutePlanner(ros::NodeHandle nh,
 
 void RoutePlanner::initalize() {
   //////////////////////////////////////////////////////////////////////////////
+  // Variables
+  //////////////////////////////////////////////////////////////////////////////
+  waypoints_defined_ = false;
+  goal_defined_ = false;
+
+  //////////////////////////////////////////////////////////////////////////////
   // Initalize Publishers
   //////////////////////////////////////////////////////////////////////////////
-  current_pose_sub_ = nh_.subscribe("/casper_auto/localization/current_pose", 1,
+  current_pose_sub_ = nh_.subscribe("/casper_auto/current_pose", 1,
                                     &RoutePlanner::currentPoseCallback, this);
-  waypoints_sub_ = nh_.subscribe("/carla/ego_vehicle/waypoints", 1,
+  waypoints_sub_ = nh_.subscribe("/casper_auto/waypoints", 1,
                                  &RoutePlanner::waypointsCallback, this);
+  goal_sub_ = nh_.subscribe("/casper_auto/goal", 1,
+                            &RoutePlanner::goalCallback, this);
 
   global_route_pub_ =
-      nh_.advertise<nav_msgs::Path>("/casper_auto/planning/global_route", 10);
+      nh_.advertise<nav_msgs::Path>("/casper_auto/global_route", 10);
 
   //////////////////////////////////////////////////////////////////////////
   // Get All Map Info
@@ -48,16 +56,23 @@ void RoutePlanner::planRoute() {
   //////////////////////////////////////////////////////////////////////////
   // PathFinding
   //////////////////////////////////////////////////////////////////////////
-  if (current_pose_initialized_ && !waypoints_.poses.empty()) {
-    target_point_ = getTargetPoint(waypoints_, route_distance_);
+  if (current_pose_initialized_) {
+    if (waypoints_defined_) {
+      target_point_ = getTargetPoint(waypoints_, route_distance_);
+    }
+    else if (goal_defined_) {
+      target_point_ = goal_.position;
+    }
+    else {
+      return;
+    }
+
     std::vector<geometry_msgs::Point> path_points =
         pathSearch(start_point_, target_point_);
 
     ROS_INFO("Find a global route plan.");
 
-    //////////////////////////////////////////////////////////////////////////
     // Path msg
-    //////////////////////////////////////////////////////////////////////////
     global_route_ = convertToNavPathMsg(path_points);
   }
 }
@@ -83,8 +98,15 @@ void RoutePlanner::currentPoseCallback(
 }
 
 void RoutePlanner::waypointsCallback(const nav_msgs::Path::ConstPtr &msg) {
-  ROS_INFO("waypoints got ...");
+  ROS_INFO("Received a sequnce of waypoints ...");
   waypoints_ = *msg;
+  waypoints_defined_ = true;
+}
+
+void RoutePlanner::goalCallback(const geometry_msgs::PoseStamped::ConstPtr &msg) {
+  ROS_INFO("Received a goal ...");
+  goal_ = msg->pose;
+  goal_defined_ = true;
 }
 
 int RoutePlanner::getClosestIndex(nav_msgs::Path waypoints,

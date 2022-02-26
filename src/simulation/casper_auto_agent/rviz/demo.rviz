@@ -3,8 +3,7 @@ Panels:
     Help Height: 0
     Name: Displays
     Property Tree Widget:
-      Expanded:
-        - /Planning1/FinalPathMarker1/Status1
+      Expanded: ~
       Splitter Ratio: 0.4446679949760437
     Tree Height: 771
   - Class: rviz/Selection
@@ -25,7 +24,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: LidarPointCloud
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -77,8 +76,11 @@ Visualization Manager:
           "": true
           Value: true
         Planning:
-          "": true
+          FinalPath: true
           FinalPathMarker: true
+          GeneratdPaths: true
+          GlobalRoute: true
+          GlobalRouteMarker: true
           Value: true
         Prediction:
           "": true
@@ -94,7 +96,8 @@ Visualization Manager:
           RobotModel: true
           Value: true
         TrafficSignal:
-          "": true
+          StopBarrierDisplay: true
+          StopTimerDisplay: true
           Value: true
         Value: false
       Zoom Factor: 1
@@ -214,13 +217,13 @@ Visualization Manager:
     - Class: rviz/Group
       Displays:
         - Class: rviz/MarkerArray
-          Enabled: false
+          Enabled: true
           Marker Topic: /carla/markers
           Name: CarlaObjects
           Namespaces:
             {}
           Queue Size: 100
-          Value: false
+          Value: true
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -423,31 +426,7 @@ Visualization Manager:
         - Class: rviz/Marker
           Enabled: true
           Marker Topic: /line_point_mark
-          Name: Marker
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
-        - Class: rviz/Marker
-          Enabled: true
-          Marker Topic: /trajectory_circle_mark
-          Name: Marker
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
-        - Class: rviz/Marker
-          Enabled: true
-          Marker Topic: /next_target_mark
-          Name: NextTarget
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
-        - Class: rviz/Marker
-          Enabled: true
-          Marker Topic: /search_circle_mark
-          Name: SearchCircle
+          Name: LinePoint
           Namespaces:
             {}
           Queue Size: 100
@@ -457,7 +436,31 @@ Visualization Manager:
           Marker Topic: /trajectory_circle_mark
           Name: TrajectoryCircle
           Namespaces:
-            {}
+            trajectory_circle_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /next_target_mark
+          Name: NextTarget
+          Namespaces:
+            next_target_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /search_circle_mark
+          Name: SearchCircle
+          Namespaces:
+            search_radius_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /trajectory_circle_mark
+          Name: TrajectoryCircle
+          Namespaces:
+            trajectory_circle_marker: true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -465,7 +468,7 @@ Visualization Manager:
           Marker Topic: /next_waypoint_mark
           Name: NextWaypoint
           Namespaces:
-            {}
+            next_waypoint_marker: true
           Queue Size: 100
           Value: true
       Enabled: true
@@ -498,7 +501,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 25.15346908569336
+      Distance: 28.795814514160156
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -506,17 +509,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 6.18754243850708
+        Y: -0.23775187134742737
+        Z: 2.384185791015625e-07
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6603984236717224
+      Pitch: 0.08039845526218414
       Target Frame: <Fixed Frame>
-      Yaw: 3.1503994464874268
+      Yaw: 3.305377960205078
     Saved: ~
 Window Geometry:
   Displays:
