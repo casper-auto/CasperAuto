@@ -8,6 +8,7 @@ import PIL
 from six import BytesIO
 
 import rospy
+import rospkg
 from std_msgs.msg import Int32, Bool
 from geometry_msgs.msg import PoseStamped, Pose
 from styx_msgs.msg import TrafficLightArray, TrafficLight
@@ -34,11 +35,13 @@ class TLDetector(object):
 
         self.bridge = CvBridge()
 
-        self.labelmap_path = f'/home/peng/Downloads/carla_tflight/training/label_map.pbtxt'
+        self.path = rospkg.RosPack().get_path('tl_detector')
+
+        self.labelmap_path = os.path.join(self.path, './config/label_map.pbtxt')
         self.category_index = label_map_util.create_category_index_from_labelmap(self.labelmap_path, use_display_name=True)
 
         tf.keras.backend.clear_session()
-        self.model = tf.saved_model.load(f'/home/peng/Downloads/carla_tflight/inference_graph/saved_model')
+        self.model = tf.saved_model.load(os.path.join(self.path, './config/inference_graph/saved_model'))
 
         self.processed_image_pub = rospy.Publisher('/processed_image', Image, queue_size=1)
         self.traffic_light_state_pub = rospy.Publisher('/traffic_light_state', Int32, queue_size=1)
