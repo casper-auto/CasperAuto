@@ -1,0 +1,17 @@
+<!-- -->
+<launch>
+  <arg name='host' default='localhost'/>
+  <arg name='port' default='2000'/>
+  <arg name='role_name' default='ego_vehicle' />
+  <arg name='route_file' default='data/routes_devtest.xml' />
+  <arg name='route_id' default='1' />
+
+  <param name="/carla/host" value="$(arg host)" />
+  <param name="/carla/port" value="$(arg port)" />
+
+  <node pkg="carla_route_loader" type="carla_route_loader.py" name="carla_route_loader" output="screen">
+    <param name="role_name" value="$(arg role_name)" />
+    <param name="route_file" value="$(arg route_file)" />
+    <param name="route_id" value="$(arg route_id)" />
+  </node>
+</launch>

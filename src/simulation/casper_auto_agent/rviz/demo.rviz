@@ -24,7 +24,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: LidarPointCloud
+    SyncSource: ""
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -76,11 +76,7 @@ Visualization Manager:
           "": true
           Value: true
         Planning:
-          FinalPath: true
-          FinalPathMarker: true
-          GeneratdPaths: true
-          GlobalRoute: true
-          GlobalRouteMarker: true
+          "": true
           Value: true
         Prediction:
           "": true
@@ -373,8 +369,8 @@ Visualization Manager:
           Marker Topic: /casper_auto/global_route_markers
           Name: GlobalRouteMarker
           Namespaces:
-            global_lane_array_marker: true
-            global_lane_waypoint_orientation_marker: true
+            global_route_marker: true
+            global_route_orientation_marker: true
           Queue Size: 100
           Value: true
         - Alpha: 5
@@ -436,7 +432,7 @@ Visualization Manager:
           Marker Topic: /trajectory_circle_mark
           Name: TrajectoryCircle
           Namespaces:
-            trajectory_circle_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -444,7 +440,7 @@ Visualization Manager:
           Marker Topic: /next_target_mark
           Name: NextTarget
           Namespaces:
-            next_target_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -452,7 +448,7 @@ Visualization Manager:
           Marker Topic: /search_circle_mark
           Name: SearchCircle
           Namespaces:
-            search_radius_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -460,7 +456,7 @@ Visualization Manager:
           Marker Topic: /trajectory_circle_mark
           Name: TrajectoryCircle
           Namespaces:
-            trajectory_circle_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -468,7 +464,7 @@ Visualization Manager:
           Marker Topic: /next_waypoint_mark
           Name: NextWaypoint
           Namespaces:
-            next_waypoint_marker: true
+            {}
           Queue Size: 100
           Value: true
       Enabled: true
@@ -501,7 +497,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 28.795814514160156
+      Distance: 9.86685562133789
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -509,17 +505,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 6.18754243850708
-        Y: -0.23775187134742737
-        Z: 2.384185791015625e-07
+        X: -1.0738725662231445
+        Y: -0.21830111742019653
+        Z: 1.4524013067784836e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.08039845526218414
+      Pitch: 0.24039897322654724
       Target Frame: <Fixed Frame>
-      Yaw: 3.305377960205078
+      Yaw: 3.150371789932251
     Saved: ~
 Window Geometry:
   Displays:
