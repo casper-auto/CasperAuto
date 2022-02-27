@@ -1,0 +1,5 @@
+<!-- -->
+<launch>
+  <node pkg="carla_tf_light" type="tf_light_test.py" name="tf_light_test" output="screen">
+  </node>
+</launch>

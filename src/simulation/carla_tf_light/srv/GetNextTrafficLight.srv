@@ -1,0 +1,4 @@
+geometry_msgs/Pose current_pose
+---
+int32 state
+geometry_msgs/Point stop_line

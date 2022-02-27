@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-#
-# Copyright (c) 2019 Intel Corporation
-#
-# This work is licensed under the terms of the MIT license.
-# For a copy, see <https://opensource.org/licenses/MIT>.
 """
 Generates a plan of waypoints to follow
 
@@ -184,7 +178,7 @@ class CarlaRoutePlanner(object):
         #     start.location.z))
 
         """
-        Calculate the source lane line
+        Calculate the route
         """
         start_location = carla.Location(start.location.x,
                                         start.location.y,
@@ -240,7 +234,7 @@ class CarlaRoutePlanner(object):
 
         waypoint_marker.header.frame_id = "map"
         # waypoint_marker.header.stamp = rospy.Time.now()
-        waypoint_marker.ns = "global_lane_array_marker"
+        waypoint_marker.ns = "global_route_marker"
         waypoint_marker.type = Marker.LINE_STRIP
         waypoint_marker.action = Marker.ADD
         waypoint_marker.scale.x = 0.75
@@ -289,7 +283,7 @@ class CarlaRoutePlanner(object):
                 waypoint_marker.color.r = 1.0
                 waypoint_marker.color.a = 1.0
                 # waypoint_marker.frame_locked = False
-                waypoint_marker.ns = "global_lane_waypoint_orientation_marker"
+                waypoint_marker.ns = "global_route_orientation_marker"
                 waypoint_marker.id = count
                 waypoint_marker.pose = pose
                 waypoint_marker.color.r = 0.0

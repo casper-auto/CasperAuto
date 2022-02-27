@@ -92,8 +92,11 @@ Visualization Manager:
           RobotModel: true
           Value: true
         TrafficSignal:
+          NextTrafficLight: true
           StopBarrierDisplay: true
           StopTimerDisplay: true
+          TrafficLightVolumes: true
+          TrafficLightsMarkers: true
           Value: true
         Value: false
       Zoom Factor: 1
@@ -296,26 +299,6 @@ Visualization Manager:
       Name: HDMap
     - Class: rviz/Group
       Displays:
-        - Class: rviz/Marker
-          Enabled: true
-          Marker Topic: /region/stop_timer_display
-          Name: StopTimerDisplay
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
-        - Class: rviz/Marker
-          Enabled: true
-          Marker Topic: /region/stop_barrier_display
-          Name: StopBarrierDisplay
-          Namespaces:
-            {}
-          Queue Size: 100
-          Value: true
-      Enabled: true
-      Name: TrafficSignal
-    - Class: rviz/Group
-      Displays:
         - Class: rviz/MarkerArray
           Enabled: true
           Marker Topic: /casper_auto/detected_objects_marker
@@ -369,8 +352,7 @@ Visualization Manager:
           Marker Topic: /casper_auto/global_route_markers
           Name: GlobalRouteMarker
           Namespaces:
-            global_route_marker: true
-            global_route_orientation_marker: true
+            {}
           Queue Size: 100
           Value: true
         - Alpha: 5
@@ -402,9 +384,7 @@ Visualization Manager:
           Marker Topic: /casper_auto/final_path_marker
           Name: FinalPathMarker
           Namespaces:
-            local_path_marker: true
-            local_point_marker: true
-            local_waypoint_velocity: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/MarkerArray
@@ -469,6 +449,50 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: Control
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /region/stop_timer_display
+          Name: StopTimerDisplay
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /region/stop_barrier_display
+          Name: StopBarrierDisplay
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /casper_auto/traffic_lights_markers
+          Name: TrafficLightsMarkers
+          Namespaces:
+            tf_light_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /casper_auto/traffic_light_volumes_markers
+          Name: TrafficLightVolumes
+          Namespaces:
+            tf_light_volume_marker: true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /casper_auto/traffic_light_test
+          Name: NextTrafficLight
+          Namespaces:
+            next_tf_light_marker: true
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: TrafficSignal
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -497,7 +521,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 9.86685562133789
+      Distance: 25.925823211669922
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -513,9 +537,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.24039897322654724
+      Pitch: 0.39039912819862366
       Target Frame: <Fixed Frame>
-      Yaw: 3.150371789932251
+      Yaw: 3.205376625061035
     Saved: ~
 Window Geometry:
   Displays:
