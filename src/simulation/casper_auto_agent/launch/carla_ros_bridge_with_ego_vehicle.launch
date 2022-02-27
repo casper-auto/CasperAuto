@@ -46,6 +46,8 @@
 
   <include file="$(find odr_map_loader)/launch/odr_map_loader.launch" />
 
+  <include file="$(find carla_tf_light)/launch/tf_light.launch" />
+
   <include file="$(find message_translator)/launch/message_translator.launch" />
 
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find casper_auto_agent)/rviz/demo.rviz"/>

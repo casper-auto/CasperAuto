@@ -122,6 +122,13 @@ class TfLightPublisher(object):
         dy = p1.y - p2.y
         return dx**2 + dy**2
 
+    def normalize(self, angle):
+        while angle > math.pi:
+            angle -= math.pi * 2
+        while angle < math.pi:
+            angle += math.pi * 2
+        return angle
+
     def get_next_tf_light(self, req, response=None):
 
         print('Get next tf light service is called.')
@@ -140,6 +147,13 @@ class TfLightPublisher(object):
             tf_light = self.traffic_lights[key]
             trigger_point = self.get_trafficlight_trigger_location(tf_light)
             dist = self.distance(point, trigger_point)
+
+            quat = tf_light['transform'].orientation
+            quat = [quat.x, quat.y, quat.z, quat.w]
+            _, _, tf_light_yaw = euler_from_quaternion(quat)
+
+            if abs(self.normalize(yaw - tf_light_yaw)) < math.pi/2.0:
+                continue
 
             trigger_point_local = global_to_local(point, yaw, trigger_point)
 
@@ -247,6 +261,8 @@ class TfLightPublisher(object):
             bounding_box_marker.color = self.GREEN
         else:
             bounding_box_marker.color = self.WHITE
+
+        bounding_box_marker.color.a = 0.5
 
         return bounding_box_marker
 

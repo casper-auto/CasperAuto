@@ -112,7 +112,7 @@ class TfLightTest(object):
         tf_light_marker.pose.orientation.w = self.current_pose.orientation.w
 
         tf_light_marker.scale.x = 1.0
-        tf_light_marker.scale.y = 5.0
+        tf_light_marker.scale.y = 10.0
         tf_light_marker.scale.z = 2.5
 
         # uint8 RED=0
@@ -128,6 +128,8 @@ class TfLightTest(object):
             tf_light_marker.color = self.GREEN
         else:
             tf_light_marker.color = self.WHITE
+
+        tf_light_marker.color.a = 0.25
 
         return tf_light_marker
 
