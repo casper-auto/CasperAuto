@@ -171,7 +171,7 @@ void LatticePlanner::plan() {
 
     std::vector<Waypoint2D> vel_profile;
 
-    if (enable_velocity_planner_ && tl_detector_initialized_) {
+    if (enable_velocity_planner_) {
       // Find the leading vehicle if exists
       // Done in objects Callback
 

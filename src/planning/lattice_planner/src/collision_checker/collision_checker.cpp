@@ -92,18 +92,18 @@ int CollisionChecker::selectBestPathIndex(
   double best_score = DBL_MAX;
   for (int i = 0; i < paths.size(); i++) {
     double score = 0;
-    // Handle the case of collision-free paths.
-    if (collision_check_array[i]) {
-      double distance = distance2D(paths[i][paths[i].size() - 1].position,
-                                   goal_pose.position);
-      score += logistic(distance);
-      std::cout  << "Collision free path with cost = " << score << std::endl;
-    }
+    // The closer to the goal, the lower of the score.
+    double distance = distance2D(paths[i][paths[i].size() - 1].position,
+                                 goal_pose.position);
+    score += logistic(distance);
+
     // Handle the case of colliding paths.
-    else {
-      // std::cout  << "path " << i << " get score inf!" << std::endl;
-      score = 10000;
+    if (!collision_check_array[i]) {
+      score += 10000;
+      std::cout  << "Path " << i << " get penalized with 1000 scores." << std::endl;
     }
+
+    std::cout  << "Path " << i << " with cost = " << score << std::endl;
 
     // Set the best index to be the path index with the lowest score
     if (score < best_score) {
