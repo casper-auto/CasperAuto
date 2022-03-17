@@ -1,0 +1,10 @@
+<!-- -->
+<launch>
+  <arg name="role_name" default="ego_vehicle" />
+  <arg name="detect_range" default="60.0" />
+
+  <node pkg="message_translator" type="message_translator.py" name="message_translator" output="screen">
+    <param name="role_name" type="string" value="$(arg role_name)"/>
+    <param name="detect_range" type="double" value="$(arg detect_range)"/>
+  </node>
+</launch>
