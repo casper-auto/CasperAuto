@@ -77,7 +77,7 @@ class CarlaRoutePlanner(object):
         self.goal_set = False
         target_point_param = rospy.get_param('~target_point')
         if target_point_param:
-            rospy.loginfo("Using ros parameter for spawnpoint: {}".format(target_point_param))
+            rospy.loginfo("Using ros parameter for target point: {}".format(target_point_param))
             target_point = target_point_param.split(',')
             if len(target_point) != 3:
                 raise ValueError("Invalid spawnpoint '{}'".format(target_point_param))

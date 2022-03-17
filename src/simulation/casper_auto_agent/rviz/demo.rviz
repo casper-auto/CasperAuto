@@ -36,7 +36,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.029999999329447746
         Value: Lines
@@ -49,7 +49,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Class: rviz/Camera
       Enabled: false
       Image Rendering: background and overlay
@@ -73,10 +73,14 @@ Visualization Manager:
           Stoplines: true
           Value: true
         Perception:
-          "": true
+          DetectedObjectArray: true
           Value: true
         Planning:
-          "": true
+          FinalPath: true
+          FinalPathMarker: true
+          GeneratdPaths: true
+          GlobalRoute: true
+          GlobalRouteMarker: true
           Value: true
         Prediction:
           Prediction Paths: true
@@ -92,7 +96,11 @@ Visualization Manager:
           RobotModel: true
           Value: true
         TrafficSignal:
-          "": true
+          NextTrafficLight: true
+          StopBarrierDisplay: true
+          StopTimerDisplay: true
+          TrafficLightVolumes: true
+          TrafficLightsMarkers: true
           Value: true
         Value: false
       Zoom Factor: 1
@@ -300,7 +308,7 @@ Visualization Manager:
           Marker Topic: /casper_auto/detected_objects_marker
           Name: DetectedObjectArray
           Namespaces:
-            {}
+            "": true
           Queue Size: 100
           Value: true
       Enabled: true
@@ -484,7 +492,7 @@ Visualization Manager:
           Marker Topic: /casper_auto/traffic_light_test
           Name: NextTrafficLight
           Namespaces:
-            next_tf_light_marker: true
+            {}
           Queue Size: 100
           Value: true
       Enabled: true
@@ -517,7 +525,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 25.925823211669922
+      Distance: 24.380741119384766
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -525,17 +533,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: -1.0738725662231445
-        Y: -0.21830111742019653
-        Z: 1.4524013067784836e-06
+        X: 2.1989669799804688
+        Y: 0.12958335876464844
+        Z: 1.5120059515538742e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4053991138935089
+      Pitch: 0.315399706363678
       Target Frame: <Fixed Frame>
-      Yaw: 3.1353752613067627
+      Yaw: 3.1440541744232178
     Saved: ~
 Window Geometry:
   Displays:

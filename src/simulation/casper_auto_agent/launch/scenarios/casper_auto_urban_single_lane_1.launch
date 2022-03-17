@@ -9,6 +9,7 @@
   <arg name='role_name' default='ego_vehicle'/>
   <arg name="vehicle_filter" default='vehicle.*'/>
   <arg name="spawn_point" default='107,-133.5,0.5,0,0,0'/><!-- use comma separated format "x,y,z,roll,pitch,yaw" -->
+  <arg name="target_point" default='316.4,-133.6,0'/>
 
   <!-- Map to load on startup (either a predefined CARLA town (e.g. 'Town01'), or a OpenDRIVE map file) -->
   <arg name="town" default='Town01'/>
@@ -49,6 +50,10 @@
   <include file="$(find carla_tf_light)/launch/tf_light.launch" />
 
   <include file="$(find message_translator)/launch/message_translator.launch" />
+
+  <include file="$(find carla_route_planner)/launch/carla_route_planner.launch">
+    <arg name='target_point' value='$(arg target_point)'/>
+  </include>
 
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find casper_auto_agent)/rviz/demo.rviz"/>
 
