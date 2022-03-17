@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(motion_controller)
+project(trajectory_controller)
 
 add_compile_options(-std=c++11)
 
@@ -28,15 +28,15 @@ include_directories(
 
 include_directories(${EIGEN3_INCLUDE_DIR})
 
-add_executable(motion_controller
-  src/motion_controller.cpp
-  src/motion_controller_node.cpp)
+add_executable(trajectory_controller
+  src/trajectory_controller.cpp
+  src/trajectory_controller_node.cpp)
 
-target_link_libraries(motion_controller
+target_link_libraries(trajectory_controller
  ${catkin_LIBRARIES}
 )
 
-add_dependencies(motion_controller
+add_dependencies(trajectory_controller
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )

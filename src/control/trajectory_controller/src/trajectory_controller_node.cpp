@@ -7,7 +7,7 @@
 #include "carla_msgs/CarlaEgoVehicleControl.h"
 #include "geometry_msgs/Quaternion.h"
 #include "geometry_msgs/Vector3.h"
-#include "motion_controller.h"
+#include "trajectory_controller.h"
 #include "nav_msgs/Odometry.h"
 #include "ros/ros.h"
 #include "tf/LinearMath/Matrix3x3.h"
@@ -27,7 +27,7 @@ vector<vector<double>> final_waypoints;
 vector<double> prev_p(2);
 
 void currentPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
-  // ROS_INFO("Received current pose in motion controller ...");
+  // ROS_INFO("Received current pose in trajectory controller ...");
 
   geometry_msgs::Quaternion geo_quat = msg->pose.orientation;
 
@@ -50,7 +50,7 @@ void currentPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
 }
 
 void currentVelocityCallback(const geometry_msgs::TwistStamped::ConstPtr& msg) {
-  // ROS_INFO("Received current velocity in motion controller ...");
+  // ROS_INFO("Received current velocity in trajectory controller ...");
 
   current_velocity[0] = msg->twist.linear.x;
   current_velocity[1] = msg->twist.linear.y;
@@ -61,7 +61,7 @@ void currentVelocityCallback(const geometry_msgs::TwistStamped::ConstPtr& msg) {
 }
 
 void finalWaypointsCallback(const casper_auto_msgs::WaypointArray::ConstPtr& msg) {
-  // ROS_INFO("Received final waypoints in motion controller ...");
+  // ROS_INFO("Received final waypoints in trajectory controller ...");
 
   ////////////////////////////////////////////////////////////////////////////
   // process final path
@@ -80,7 +80,7 @@ void finalWaypointsCallback(const casper_auto_msgs::WaypointArray::ConstPtr& msg
 }
 
 int main(int argc, char** argv) {
-  ros::init(argc, argv, "motion_controller");
+  ros::init(argc, argv, "trajectory_controller");
   ros::NodeHandle n("~");
 
   //////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ int main(int argc, char** argv) {
       n.advertise<carla_msgs::CarlaEgoVehicleControl>(
           "/carla/" + role_name + "/vehicle_control_cmd", 10);
 
-  MotionController mc(control_method, lookahead_dist_mpc, lookahead_t_mpc);
+  TrajectoryController mc(control_method, lookahead_dist_mpc, lookahead_t_mpc);
 
   std::deque<double> latency_steering_deque, latency_brake_deque,
       latency_throttle_deque;

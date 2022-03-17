@@ -1,4 +1,4 @@
-#include "motion_controller.h"
+#include "trajectory_controller.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // Helper functions
@@ -37,10 +37,10 @@ double cross(vector<double>& A, vector<double>& B) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// MotionController class
+// TrajectoryController class
 ////////////////////////////////////////////////////////////////////////////////
 
-MotionController::MotionController(string control_method,
+TrajectoryController::TrajectoryController(string control_method,
                                    double lookahead_dist_mpc,
                                    double lookahead_t_mpc) {
   m_vars;
@@ -56,7 +56,7 @@ MotionController::MotionController(string control_method,
   m_lookahead_dist_mpc = lookahead_dist_mpc;
 }
 
-void MotionController::update_values(vector<double>& current_pose,
+void TrajectoryController::update_values(vector<double>& current_pose,
                                      vector<double>& current_velocity,
                                      double timestamp) {
   m_current_pose = current_pose;
@@ -64,7 +64,7 @@ void MotionController::update_values(vector<double>& current_pose,
   m_current_timestamp = timestamp;
 }
 
-void MotionController::update_desired_speed() {
+void TrajectoryController::update_desired_speed() {
   if (m_closest_index < m_waypoints.size() - 1) {
     m_desired_speed = m_waypoints[m_closest_index][2];
   } else {
@@ -72,7 +72,7 @@ void MotionController::update_desired_speed() {
   }
 }
 
-void MotionController::update_waypoints(vector<vector<double>>& waypoints) {
+void TrajectoryController::update_waypoints(vector<vector<double>>& waypoints) {
   m_waypoints.clear();
   m_waypoints.resize(waypoints.size());
   for (int i = 0; i < waypoints.size(); i++) {
@@ -86,7 +86,7 @@ void MotionController::update_waypoints(vector<vector<double>>& waypoints) {
   m_closest_index = get_closest_index(waypoints, m_current_pose);
 }
 
-int MotionController::get_closest_index(vector<vector<double>> waypoints,
+int TrajectoryController::get_closest_index(vector<vector<double>> waypoints,
                                         vector<double> ego_state) {
   double closest_len = DBL_MAX;
   int closest_index = 0;
@@ -103,7 +103,7 @@ int MotionController::get_closest_index(vector<vector<double>> waypoints,
   return closest_index;
 }
 
-int MotionController::get_goal_waypoint_index(double x, double y,
+int TrajectoryController::get_goal_waypoint_index(double x, double y,
                                               vector<vector<double>> waypoints,
                                               double lookahead_distance) {
   for (int i = 0; i < waypoints.size(); i++) {
@@ -115,13 +115,13 @@ int MotionController::get_goal_waypoint_index(double x, double y,
   return waypoints.size() - 1;
 }
 
-double MotionController::get_alpha(vector<double> v1, vector<double> v2,
+double TrajectoryController::get_alpha(vector<double> v1, vector<double> v2,
                                    double lookahead_distance) {
   double inner_prod = v1[0] * v2[0] + v1[1] * v2[1];
   return acos(inner_prod / lookahead_distance);
 }
 
-int MotionController::get_steering_direction(vector<double> v1,
+int TrajectoryController::get_steering_direction(vector<double> v1,
                                              vector<double> v2) {
   double cross_prod = v1[0] * v2[1] - v1[1] * v2[0];
   if (cross_prod >= 0) {
@@ -130,7 +130,7 @@ int MotionController::get_steering_direction(vector<double> v1,
   return 1;
 }
 
-double MotionController::get_heading_error(vector<vector<double>> waypoints,
+double TrajectoryController::get_heading_error(vector<vector<double>> waypoints,
                                            double current_yaw) {
   double waypoint_delta_x = waypoints[1][0] - waypoints[0][0];
   double waypoint_delta_y = waypoints[1][1] - waypoints[0][1];
@@ -141,7 +141,7 @@ double MotionController::get_heading_error(vector<vector<double>> waypoints,
   return heading_error_mod;
 }
 
-double MotionController::get_cte_heading_error(double v) {
+double TrajectoryController::get_cte_heading_error(double v) {
   double kcte = 3.0;  // CONSTANT TO BE MOVED TO CONSTRUCTOR
   double proportional_cte_error = kcte * m_closest_distance;
   double cte_heading_error = atan(proportional_cte_error / v);
@@ -151,7 +151,7 @@ double MotionController::get_cte_heading_error(double v) {
   return cte_heading_error_mod;
 }
 
-vector<double> MotionController::get_predicted_wheel_location(
+vector<double> TrajectoryController::get_predicted_wheel_location(
     double x, double y, double steering_angle, double yaw, double v) {
   double wheel_heading = yaw + steering_angle;
   double wheel_traveled_dist = v * (m_current_timestamp - m_vars["t_previous"]);
@@ -159,13 +159,13 @@ vector<double> MotionController::get_predicted_wheel_location(
           y + wheel_traveled_dist * sin(wheel_heading)};
 }
 
-void MotionController::set_throttle(double input_throttle) {
+void TrajectoryController::set_throttle(double input_throttle) {
   // Clamp the throttle command to valid bounds
   double throttle = max(min(input_throttle, 1.0), 0.0);
   m_set_commands[0] = throttle;
 }
 
-void MotionController::set_steer(double input_steer_in_rad) {
+void TrajectoryController::set_steer(double input_steer_in_rad) {
   // Covnert radians to [-1, 1]
   double input_steer = rad_to_steer(input_steer_in_rad);
 
@@ -174,18 +174,18 @@ void MotionController::set_steer(double input_steer_in_rad) {
   m_set_commands[1] = steer;
 }
 
-void MotionController::set_brake(double input_brake) {
+void TrajectoryController::set_brake(double input_brake) {
   // Clamp the steering command to valid bounds
   double brake = max(min(input_brake, 1.0), 0.0);
   m_set_commands[2] = brake;
 }
 
-void MotionController::reset_pid() {
+void TrajectoryController::reset_pid() {
   m_vars["prev_throttle"] = 0.0;
   m_vars["v_error_previous"] = 0.0;
 }
 
-double MotionController::calculate_throttle(double t, double v,
+double TrajectoryController::calculate_throttle(double t, double v,
                                             double v_desired) {
   // in this controller, we assume no braking, so brake_output is always 0
   // We use PID + feedforward method for longitudinal controller
@@ -222,7 +222,7 @@ double MotionController::calculate_throttle(double t, double v,
   return throttle;
 }
 
-double MotionController::calculate_steering(double t, double x, double y,
+double TrajectoryController::calculate_steering(double t, double x, double y,
                                             double yaw,
                                             vector<vector<double>> waypoints,
                                             double v) {
@@ -301,7 +301,7 @@ double MotionController::calculate_steering(double t, double x, double y,
   return steering;
 }
 
-void MotionController::update_controls(double lag_throttle, double lag_brake,
+void TrajectoryController::update_controls(double lag_throttle, double lag_brake,
                                        double lag_steering,
                                        double frequency_update,
                                        bool add_latency) {

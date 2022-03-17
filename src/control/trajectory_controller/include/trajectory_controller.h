@@ -26,12 +26,12 @@ double norm(vector<double> a);
 double cross(vector<double>& A, vector<double>& B);
 
 ////////////////////////////////////////////////////////////////////////////////
-// MotionController class
+// TrajectoryController class
 ////////////////////////////////////////////////////////////////////////////////
 
-class MotionController {
+class TrajectoryController {
  public:
-  MotionController(string control_method, double lookahead_dist_mpc,
+  TrajectoryController(string control_method, double lookahead_dist_mpc,
                    double lookahead_t_mpc);
 
   void update_values(vector<double>& current_pose, vector<double>& current_velocity, double timestamp);

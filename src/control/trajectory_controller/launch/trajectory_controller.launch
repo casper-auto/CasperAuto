@@ -3,9 +3,8 @@
   <!-- <param name="/use_sim_time" value="true" /> -->
   <arg name="role_name" default="ego_vehicle" />
   <arg name="control_method" default="MPC" /> <!-- "PurePursuit", "Stanley", "MPC" -->
-  <arg name="node_start_delay" default="5.0" />
 
-  <node pkg="motion_controller" type="motion_controller" name="motion_controller" output="log" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' " >
+  <node pkg="trajectory_controller" type="trajectory_controller" name="trajectory_controller" output="log">
     <param name="role_name" type="string" value="$(arg role_name)" />
     <param name="control_method" type="string" value="$(arg control_method)" />
     <param name="add_latency" type="bool" value="false" />
