@@ -1,4 +1,4 @@
-#include "spiral_planner/spiral_planner.h"
+#include "lattice_planner/lattice_planner.h"
 
 using namespace geometry;
 
@@ -19,10 +19,10 @@ double normalized_angle(double angle) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// class SpiralPlanner
+// class LatticePlanner
 ///////////////////////////////////////////////////////////////////////////////
 
-SpiralPlanner::SpiralPlanner(ros::NodeHandle nh) : nh_(nh) {
+LatticePlanner::LatticePlanner(ros::NodeHandle nh) : nh_(nh) {
   initialize();
 
   ros::Rate rate(10);
@@ -40,11 +40,11 @@ SpiralPlanner::SpiralPlanner(ros::NodeHandle nh) : nh_(nh) {
   }
 }
 
-SpiralPlanner::~SpiralPlanner() {
+LatticePlanner::~LatticePlanner() {
   // detroy pointers
 }
 
-void SpiralPlanner::initialize() {
+void LatticePlanner::initialize() {
   //////////////////////////////////////////////////////////////////////////////
   // ROS Param Server
   //////////////////////////////////////////////////////////////////////////////
@@ -78,17 +78,17 @@ void SpiralPlanner::initialize() {
 
   // ros subscribers
   current_pose_sub_ =
-      nh_.subscribe("/current_pose", 1, &SpiralPlanner::currentPoseCallback, this);
+      nh_.subscribe("/current_pose", 1, &LatticePlanner::currentPoseCallback, this);
   current_speed_sub_ =
-      nh_.subscribe("/current_speed", 1, &SpiralPlanner::currentSpeedCallback, this);
+      nh_.subscribe("/current_speed", 1, &LatticePlanner::currentSpeedCallback, this);
   detected_objects_sub_ = nh_.subscribe(
-      "/detected_objects", 1, &SpiralPlanner::detectedObjectsCallback, this);
+      "/detected_objects", 1, &LatticePlanner::detectedObjectsCallback, this);
   global_route_sub_ = nh_.subscribe("/global_route", 1,
-                                    &SpiralPlanner::globalRouteCallback, this);
+                                    &LatticePlanner::globalRouteCallback, this);
   stop_line_signal_sub_ = nh_.subscribe(
-      "/stop_line_activated", 1, &SpiralPlanner::stoplineSignalCallback, this);
+      "/stop_line_activated", 1, &LatticePlanner::stoplineSignalCallback, this);
   stop_point_sub_ = nh_.subscribe(
-      "/stop_point", 1, &SpiralPlanner::stopPointCallback, this);
+      "/stop_point", 1, &LatticePlanner::stopPointCallback, this);
 
   // ros publishers
   selected_path_pub_ = nh_.advertise<nav_msgs::Path>("/selected_path", 1);
@@ -119,7 +119,7 @@ void SpiralPlanner::initialize() {
   ROS_INFO("Initialization complete.");
 }
 
-void SpiralPlanner::plan() {
+void LatticePlanner::plan() {
   auto start = std::chrono::high_resolution_clock::now();
   double curr_timestamp = ros::Time::now().toSec();
 
@@ -204,7 +204,7 @@ void SpiralPlanner::plan() {
           follow_lead_vehicle_ = true;
           distance = distance2D(current_state_.position, check_p_global);
 
-          double vel = detected_objects_[i].velocity.linear.x;
+          double vel = detected_objects_[i].twist.linear.x;
           double distance_thresh = 8 + vel * 0.5;
 
           if (distance < distance_thresh) {
@@ -260,7 +260,7 @@ void SpiralPlanner::plan() {
 goal_pose: Goal pose for the vehicle to reach (local frame)
    format: [x_goal, y_goal, theta], in units [m, m, rad]
 */
-std::vector<Pose2D> SpiralPlanner::getGoalPoseSet() {
+std::vector<Pose2D> LatticePlanner::getGoalPoseSet() {
   // get index
   double x = current_state_.position.x;
   double y = current_state_.position.y;
@@ -334,7 +334,7 @@ std::vector<Pose2D> SpiralPlanner::getGoalPoseSet() {
 // Plans the path set using polynomial spiral optimization to
 // each of the goal states.
 std::vector<std::vector<Pose2D>>
-SpiralPlanner::generatePaths(std::vector<Pose2D> &goal_pose_set) {
+LatticePlanner::generatePaths(std::vector<Pose2D> &goal_pose_set) {
   std::vector<std::vector<Pose2D>> paths;
 
   if (run_parallel_) {
@@ -365,7 +365,7 @@ SpiralPlanner::generatePaths(std::vector<Pose2D> &goal_pose_set) {
 }
 
 std::vector<Pose2D>
-SpiralPlanner::convertToPoseArray(std::vector<std::vector<double>> &spiral) {
+LatticePlanner::convertToPoseArray(std::vector<std::vector<double>> &spiral) {
   std::vector<Pose2D> path(spiral.size());
   for (int i = 0; i < spiral.size(); i++) {
     path[i] = Pose2D(spiral[i][0], spiral[i][1], spiral[i][2]);
@@ -377,7 +377,7 @@ SpiralPlanner::convertToPoseArray(std::vector<std::vector<double>> &spiral) {
 // Converts the paths from the local (vehicle) coordinate frame to the
 // global coordinate frame.
 std::vector<std::vector<Pose2D>>
-SpiralPlanner::transformPaths(std::vector<std::vector<Pose2D>> &paths) {
+LatticePlanner::transformPaths(std::vector<std::vector<Pose2D>> &paths) {
   // access current state
   double current_x = current_state_.position.x;
   double current_y = current_state_.position.y;
@@ -405,7 +405,7 @@ SpiralPlanner::transformPaths(std::vector<std::vector<Pose2D>> &paths) {
 
 // In global coordinate frame.
 // Extend the generated paths to reach path distance.
-std::vector<Pose2D> SpiralPlanner::extendPath(std::vector<Pose2D> &path,
+std::vector<Pose2D> LatticePlanner::extendPath(std::vector<Pose2D> &path,
                                               double path_distance,
                                               int path_id) {
   // extend from path
@@ -443,7 +443,7 @@ std::vector<Pose2D> SpiralPlanner::extendPath(std::vector<Pose2D> &path,
   return extended_path;
 }
 
-int SpiralPlanner::getClosestIndex(double x, double y,
+int LatticePlanner::getClosestIndex(double x, double y,
                                    std::vector<Pose2D> &path) {
   double closest_distance = DBL_MAX;
   int closest_index = 0;
@@ -459,7 +459,7 @@ int SpiralPlanner::getClosestIndex(double x, double y,
   return closest_index;
 }
 
-int SpiralPlanner::getLookaheadIndex(double x, double y,
+int LatticePlanner::getLookaheadIndex(double x, double y,
                                      std::vector<Pose2D> &path,
                                      double lookahead_distance) {
   for (int i = closest_index_; i < path.size(); i++) {
@@ -472,7 +472,7 @@ int SpiralPlanner::getLookaheadIndex(double x, double y,
 }
 
 std::vector<Point2D>
-SpiralPlanner::convertToPointArray(std::vector<Pose2D> &path) {
+LatticePlanner::convertToPointArray(std::vector<Pose2D> &path) {
   std::vector<Point2D> point_array(path.size());
   for (int i = 0; i < path.size(); i++) {
     point_array[i] = path[i].position;
@@ -480,8 +480,8 @@ SpiralPlanner::convertToPointArray(std::vector<Pose2D> &path) {
   return point_array;
 }
 
-std::vector<Point2D> SpiralPlanner::convertObstacleToPoints(
-    const autoware_msgs::DetectedObject &msg) {
+std::vector<Point2D> LatticePlanner::convertObstacleToPoints(
+    const derived_object_msgs::Object &msg) {
   ROS_INFO("Processing obstacles.");
 
   std::vector<Point2D> obstacle_pts(8, Point2D());
@@ -500,8 +500,8 @@ std::vector<Point2D> SpiralPlanner::convertObstacleToPoints(
   double roll, pitch, yaw;
   tf::Matrix3x3(quat).getRPY(roll, pitch, yaw);
 
-  double xrad = msg.dimensions.x / 2.0;
-  double yrad = msg.dimensions.y / 2.0;
+  double xrad = msg.shape.dimensions[0] / 2.0;
+  double yrad = msg.shape.dimensions[1] / 2.0;
   double zrad = 0.8;
 
   Eigen::MatrixXd cpos(8, 2), rotyaw(2, 2), cpos_shift(8, 2);
@@ -523,7 +523,7 @@ std::vector<Point2D> SpiralPlanner::convertObstacleToPoints(
 }
 
 std::vector<Pose2D>
-SpiralPlanner::convertFromNavPath(const nav_msgs::Path &msg) {
+LatticePlanner::convertFromNavPath(const nav_msgs::Path &msg) {
   std::vector<Pose2D> lane(0);
   for (int i = 0; i < msg.poses.size(); i++) {
     double x = msg.poses[i].pose.position.x;
@@ -552,7 +552,7 @@ SpiralPlanner::convertFromNavPath(const nav_msgs::Path &msg) {
 /////////////////////////
 // Callback Functions
 /////////////////////////
-void SpiralPlanner::currentPoseCallback(
+void LatticePlanner::currentPoseCallback(
     const geometry_msgs::PoseStamped::ConstPtr &msg) {
   // update current pose
   current_state_.position.x = msg->pose.position.x;
@@ -576,15 +576,15 @@ void SpiralPlanner::currentPoseCallback(
            current_state_.yaw);
 }
 
-void SpiralPlanner::currentSpeedCallback(
+void LatticePlanner::currentSpeedCallback(
     const std_msgs::Float32::ConstPtr &msg) {
   current_state_.vel = msg->data;
   ROS_INFO("Current speed: %.2f", current_state_.vel);
 }
 
-void SpiralPlanner::detectedObjectsCallback(
-    const autoware_msgs::DetectedObjectArray::ConstPtr &msg) {
-  // ROS_INFO("Dectected objects got ...");
+void LatticePlanner::detectedObjectsCallback(
+    const derived_object_msgs::ObjectArray::ConstPtr &msg) {
+  ROS_INFO("Received dectected objects in lattice planner ...");
   detected_objects_ = msg->objects;
   obstacles_.resize(detected_objects_.size());
   for (int i = 0; i < detected_objects_.size(); i++) {
@@ -594,14 +594,14 @@ void SpiralPlanner::detectedObjectsCallback(
   }
 }
 
-void SpiralPlanner::globalRouteCallback(const nav_msgs::Path::ConstPtr &msg) {
+void LatticePlanner::globalRouteCallback(const nav_msgs::Path::ConstPtr &msg) {
   // ROS_INFO("Global route got ...");
   global_route_ = convertFromNavPath(*msg);
   // ROS_INFO("Received %d valid points in the global route.",
   // int(global_route_.size()));
 }
 
-void SpiralPlanner::stoplineSignalCallback(const std_msgs::Bool::ConstPtr &msg) {
+void LatticePlanner::stoplineSignalCallback(const std_msgs::Bool::ConstPtr &msg) {
   // ROS_INFO("Stop line signal got ...");
   if (!tl_detector_initialized_) {
     tl_detector_initialized_ = true;
@@ -616,7 +616,7 @@ void SpiralPlanner::stoplineSignalCallback(const std_msgs::Bool::ConstPtr &msg) 
   }
 }
 
-void SpiralPlanner::stopPointCallback(const geometry_msgs::PointStamped::ConstPtr &msg) {
+void LatticePlanner::stopPointCallback(const geometry_msgs::PointStamped::ConstPtr &msg) {
   // ROS_INFO("Stop point got ...");
   stop_point_initialized_ = true;
   stop_point_.x = msg->point.x;
@@ -626,7 +626,7 @@ void SpiralPlanner::stopPointCallback(const geometry_msgs::PointStamped::ConstPt
 /////////////////////////
 // Publish msgs
 /////////////////////////
-void SpiralPlanner::publishSelectedPath(std::vector<Pose2D> &selected_path) {
+void LatticePlanner::publishSelectedPath(std::vector<Pose2D> &selected_path) {
   //////////////////////////////////////////////////////////////////////
   // Publish the final path as an output to other velocity planners
   //////////////////////////////////////////////////////////////////////
@@ -643,7 +643,7 @@ void SpiralPlanner::publishSelectedPath(std::vector<Pose2D> &selected_path) {
   selected_path_pub_.publish(path);
 }
 
-void SpiralPlanner::publishGenratedPaths(
+void LatticePlanner::publishGenratedPaths(
 
     std::vector<std::vector<Pose2D>> &paths, int selected_index,
     std::vector<bool> &collision_check_array) {
@@ -698,7 +698,7 @@ void SpiralPlanner::publishGenratedPaths(
   generated_paths_marker_pub_.publish(generate_paths_marker);
 }
 
-void SpiralPlanner::publishFinalWaypoints(
+void LatticePlanner::publishFinalWaypoints(
     std::vector<Waypoint2D> &vel_profile) {
   //////////////////////////////////////////////////////////////////////
   // Publish the final waypoints as an output to the controller
@@ -716,7 +716,7 @@ void SpiralPlanner::publishFinalWaypoints(
   final_waypoints_pub_.publish(final_waypoints);
 }
 
-void SpiralPlanner::publishObstaclePolygons(
+void LatticePlanner::publishObstaclePolygons(
 
     std::vector<std::vector<Point2D>> &obstacles) {
   //////////////////////////////////////////////////////////////////////

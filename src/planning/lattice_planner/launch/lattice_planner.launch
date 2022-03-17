@@ -1,9 +1,9 @@
 <!-- -->
 <launch>
 
-  <rosparam command="load" file="$(find spiral_planner)/config/params.yaml" />
+  <rosparam command="load" file="$(find lattice_planner)/config/params.yaml" />
 
-  <node pkg="spiral_planner" type="spiral_planner" name="spiral_planner" output="log">
+  <node pkg="lattice_planner" type="lattice_planner" name="lattice_planner" output="screen">
     <remap from="/current_pose" to="/casper_auto/current_pose" />
     <remap from="/current_speed" to="/casper_auto/current_speed" />
     <remap from="/detected_objects" to="/casper_auto/detected_objects" />

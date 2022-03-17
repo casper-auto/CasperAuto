@@ -1,9 +1,9 @@
-# spiral_planner
+# lattice_planner
 
 ## Usage
 
 ```
-roslauch spiral_planner spiral_planner.launch
+roslauch lattice_planner lattice_planner.launch
 ```
 
 **Example:**
@@ -21,10 +21,10 @@ roslaunch demo_entrance scenario_loader_highway_following.launch
 ```
 
 
-Terminal 3: Run spiral planner,
+Terminal 3: Run lattice planner,
 
 ```
-roslauch spiral_planner spiral_planner.launch
+roslauch lattice_planner lattice_planner.launch
 ```
 
 Terminal 4: Start scenario runner and load to stopped vehicle,
@@ -75,18 +75,18 @@ others
 
 ### Input Topics
 
-- `/region/ego_state`: The information of current state: position, orientation, vel and etc.
-- `/region/global_route`: The route got the route planner.
-- `/region/detected_objects`: The objects from perception in local frame.
-- `/region/reference_lanes`: The information of the current and neighboring lanes.
-- `/region/intention`: To be used. (TODO)
-- `/region/target_lane_id`: The lane id of the target lane to reach.
+- `/casper_auto/ego_state`: The information of current state: position, orientation, vel and etc.
+- `/casper_auto/global_route`: The route got the route planner.
+- `/casper_auto/detected_objects`: The objects from perception in local frame.
+- `/casper_auto/reference_lanes`: The information of the current and neighboring lanes.
+- `/casper_auto/intention`: To be used. (TODO)
+- `/casper_auto/target_lane_id`: The lane id of the target lane to reach.
 
 ### Output Topics
 
-- `/region/selected_path`: Or be remapped to `/region/spiral_traj`.
-- `/region/generated_paths`: Display all the generated paths with selected one in pink.
-- `/region/final_waypoints`: Only available when velocity_planner is enabled.
+- `/casper_auto/selected_path`: Selected path.
+- `/casper_auto/generated_paths`: Display all the generated paths with selected one in pink.
+- `/casper_auto/final_waypoints`: Only available when velocity_planner is enabled.
 
 ## Running in Parallel Mode
 

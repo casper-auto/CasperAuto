@@ -32,9 +32,6 @@
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
 
-#include <autoware_msgs/DetectedObject.h>
-#include <autoware_msgs/DetectedObjectArray.h>
-
 #include <tf/LinearMath/Matrix3x3.h>
 #include <tf/transform_datatypes.h>
 
@@ -66,14 +63,14 @@ enum DrivingMode { LaneKeep, LaneChange };
 double normalized_angle(double angle);
 
 ///////////////////////////////////////////////////////////////////////////////
-// class SpiralPlanner
+// class LatticePlanner
 ///////////////////////////////////////////////////////////////////////////////
 
-class SpiralPlanner {
+class LatticePlanner {
 public:
-  SpiralPlanner(ros::NodeHandle nh);
+  LatticePlanner(ros::NodeHandle nh);
 
-  ~SpiralPlanner();
+  ~LatticePlanner();
 
 private:
   // ros
@@ -123,7 +120,7 @@ private:
   std::vector<Pose2D> global_route_;
   std::vector<Pose2D> reference_route_;
   std::vector<Pose2D> prev_selected_path_;
-  std::vector<autoware_msgs::DetectedObject> detected_objects_;
+  std::vector<derived_object_msgs::Object> detected_objects_;
   std::unordered_map<int, double> lane_widths_;
   Point2D stop_point_;
   bool stop_point_initialized_;
@@ -176,7 +173,7 @@ private:
   std::vector<Point2D> convertToPointArray(std::vector<Pose2D> &path);
 
   std::vector<Point2D>
-  convertObstacleToPoints(const autoware_msgs::DetectedObject &msg);
+  convertObstacleToPoints(const derived_object_msgs::Object &msg);
 
   std::vector<Pose2D> convertFromNavPath(const nav_msgs::Path &msg);
 
@@ -186,7 +183,7 @@ private:
   void currentSpeedCallback(const std_msgs::Float32::ConstPtr &msg);
 
   void detectedObjectsCallback(
-      const autoware_msgs::DetectedObjectArray::ConstPtr &msg);
+      const derived_object_msgs::ObjectArray::ConstPtr &msg);
 
   void globalRouteCallback(const nav_msgs::Path::ConstPtr &msg);
 

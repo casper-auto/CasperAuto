@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(spiral_planner)
+project(lattice_planner)
 
 add_compile_options(-std=c++11)
 
@@ -30,17 +30,17 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(spiral_planner
-  src/spiral_planner_node.cpp
+add_executable(lattice_planner
+  src/lattice_planner_node.cpp
   src/frenet_frame.cpp
-  src/spiral_planner/spiral_planner.cpp
+  src/lattice_planner/lattice_planner.cpp
   src/path_optimizer/meta.cpp
   src/path_optimizer/path_optimizer.cpp
   src/collision_checker/collision_checker.cpp
   src/velocity_planner/velocity_planner.cpp
 )
 
-target_link_libraries(spiral_planner
+target_link_libraries(lattice_planner
   ${catkin_LIBRARIES}
   # ${EIGEN3_LIBRARIES}
 )

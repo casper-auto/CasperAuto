@@ -1,12 +1,12 @@
 // ros
 #include <ros/ros.h>
-#include "spiral_planner/spiral_planner.h"
+#include "lattice_planner/lattice_planner.h"
 
 int main(int argc, char **argv) {
-  ros::init(argc, argv, "spiral_planner");
+  ros::init(argc, argv, "lattice_planner");
   ros::NodeHandle nh("~");
 
-  planning::SpiralPlanner spiral(nh);
+  planning::LatticePlanner planner(nh);
 
   ROS_INFO("The end of node.");
 
