@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>op_utility</name>
+  <version>1.12.0</version>
+  <description>The libopenplanner_utility package</description>
+  <maintainer email="yusuke.fujii@tier4.jp">Yusuke FUJII</maintainer>
+  <author email="hatem.darweesh@g.sp.m.is.nagoya-u.ac.jp">Hatem Darweesh</author>
+  <license>Apache 2</license>
+
+  <buildtool_depend>autoware_build_flags</buildtool_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>cmake_modules</buildtool_depend>
+  <test_depend>rostest</test_depend>
+
+  <depend>tinyxml</depend>
+  <depend>vector_map_msgs</depend>
+  <depend>vector_map_server</depend>
+</package>

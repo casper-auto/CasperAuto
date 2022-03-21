@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>op_ros_helpers</name>
+  <version>1.12.0</version>
+  <description>Helper functions for OpenPlanner visualization package</description>
+  <maintainer email="yusuke.fujii@tier4.jp">Yusuke FUJII</maintainer>
+  <author email="hatem.darweesh@g.sp.m.is.nagoya-u.ac.jp">Hatem Darweesh</author>
+  <license>Apache 2</license>
+
+  <buildtool_depend>autoware_build_flags</buildtool_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>autoware_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>jsk_recognition_msgs</depend>
+  <depend>map_file</depend>
+  <depend>op_planner</depend>
+  <depend>op_simu</depend>
+  <depend>op_utility</depend>
+  <depend>pcl_conversions</depend>
+  <depend>pcl_ros</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf</depend>
+  <depend>vector_map_msgs</depend>
+  <depend>libwaypoint_follower</depend>
+</package>

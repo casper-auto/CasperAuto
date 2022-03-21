@@ -31,6 +31,7 @@ catkin_package(
   CATKIN_DEPENDS
     amathutils_lib
     autoware_msgs
+    casper_auto_msgs
     geometry_msgs
     std_msgs
 )
