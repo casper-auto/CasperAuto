@@ -1,0 +1,35 @@
+<!-- -->
+<launch>
+
+  <arg name='town' default='Town01'/>
+
+  <!--
+    # point cloud map #
+  -->
+  <!-- <include file='$(find map_file)/launch/points_map_loader.launch'>
+      <arg name='path_pcd' value='$(find carla_map_data)/data/point_cloud_maps/$(arg town).pcd'/>
+  </include> -->
+
+  <!--
+    # vector map #
+  -->
+  <node pkg='map_file' type='vector_map_loader' name='vector_map_loader' args='
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/area.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/intersection.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/line.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/point.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/whiteline.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/dtlane.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/lane.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/node.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/wayarea.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/stopline.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/roadsign.csv
+      $(find carla_map_data)/data/vector_maps/asian/$(arg town)/vector.csv'
+  />
+
+  <include file='$(find map_file)/launch/lanelet2_map_loader.launch'>
+      <arg name='file_name' value='$(find carla_map_data)/data/vector_maps/lanelet2/$(arg town).osm'/>
+  </include>
+
+</launch>
