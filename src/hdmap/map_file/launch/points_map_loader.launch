@@ -1,0 +1,15 @@
+<launch>
+
+<arg name="scene_num" default="noupdate" />
+<arg name="path_area_list" default='""' />
+<arg name="path_pcd" default='""' />
+
+<node pkg="map_file" type="points_map_loader" name="points_map_loader" output="screen">
+  <rosparam subst_value="true">
+    area: $(arg scene_num)
+    arealist_path: $(arg path_area_list)
+    pcd_paths: [ $(arg path_pcd) ]
+  </rosparam>
+</node>
+
+</launch>

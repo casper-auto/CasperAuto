@@ -1,0 +1,5 @@
+<launch>
+
+  <test test-name="test-libwaypoint_follower" pkg="libwaypoint_follower" type="test-libwaypoint_follower" name="test"/>
+
+</launch>

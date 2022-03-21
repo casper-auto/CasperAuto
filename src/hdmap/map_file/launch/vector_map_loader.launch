@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+  <node pkg="map_file" type="vector_map_loader" name="vector_map_loader" output="screen">
+    <param name="load_mode" value="directory" />
+    <param name="map_dir" value="$(env HOME)/.autoware/data/map/vector_map" />
+    <param name="host_name" value="133.6.148.90" />
+    <param name="port" value="80" />
+    <param name="user" value="" />
+    <param name="password" value="" />
+  </node>
+</launch>

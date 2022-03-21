@@ -1,0 +1,5 @@
+<launch>
+
+  <test test-name="test-pure_pursuit" pkg="libwaypoint_follower" type="test-pure_pursuit" name="test"/>
+
+</launch>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>map_file</name>
+  <version>1.12.0</version>
+  <description>The map_file package</description>
+  <maintainer email="kondoh@axe-inc.co.jp">Masao KONDOH</maintainer>
+  <license>Apache 2</license>
+
+  <buildtool_depend>autoware_build_flags</buildtool_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>autoware_msgs</depend>
+  <depend>curl</depend>
+  <depend>geometry_msgs</depend>
+  <depend>libpcl-all-dev</depend>
+  <depend>pcl_ros</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf</depend>
+  <depend>vector_map</depend>
+  <depend>visualization_msgs</depend>
+  <depend>lanelet2_extension</depend>
+  <depend>libboost-filesystem-dev</depend>
+  
+</package>
