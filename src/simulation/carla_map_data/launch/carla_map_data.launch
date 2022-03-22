@@ -1,13 +1,17 @@
 <!-- -->
 <launch>
 
-  <arg name='town' default='Town01'/>
+  <arg name='town' default='Town03'/>
+
+  <!-- world to map tf -->
+  <node pkg='tf'  type='static_transform_publisher' name='world_to_map' args='0 0 0 0 0 0 /world /map 10' />
 
   <!--
     # point cloud map #
   -->
   <!-- <include file='$(find map_file)/launch/points_map_loader.launch'>
       <arg name='path_pcd' value='$(find carla_map_data)/data/point_cloud_maps/$(arg town).pcd'/>
+      <arg name='path_pcd' value='$(env CARLA_ROOT)/HDMaps/$(arg town).pcd'/>
   </include> -->
 
   <!--
@@ -30,6 +34,14 @@
 
   <include file='$(find map_file)/launch/lanelet2_map_loader.launch'>
       <arg name='file_name' value='$(find carla_map_data)/data/vector_maps/lanelet2/$(arg town).osm'/>
+  </include>
+
+  <!--
+    # wayarea2grid #
+    Out: /grid_map_wayarea [grid_map_msgs::GridMap]
+    Out: /occupancy_wayarea [nav_msgs::OccupancyGrid]
+  -->
+  <include file='$(find object_map)/launch/wayarea2grid.launch'>
   </include>
 
 </launch>
