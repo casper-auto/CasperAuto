@@ -135,9 +135,9 @@ void OdrMapPathFinder::initalize() {
   // Initalize Publishers
   //////////////////////////////////////////////////////////////////////////////
   lanes_marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>(
-      "/casper_auto/odr_map/interested_lanes_marker", 1);
+      "/casper_auto/odr_map/reference_lanes_marker", 1);
   lanes_id_marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>(
-      "/casper_auto/odr_map/interested_lanes_id_marker", 1);
+      "/casper_auto/odr_map/reference_lanes_id_marker", 1);
   reference_lanes_pub_ = nh_.advertise<casper_auto_msgs::CenterLanes>(
       "/casper_auto/odr_map/reference_lanes", 1);
 
@@ -323,7 +323,7 @@ visualization_msgs::Marker OdrMapPathFinder::convertToPathMarkerMsg(
     std::vector<geometry_msgs::Point> &points, int marker_id) {
   visualization_msgs::Marker path_marker;
   path_marker.header.frame_id = "map";
-  path_marker.header.stamp = ros::Time::now();
+  // path_marker.header.stamp = ros::Time::now();
   path_marker.ns = "path";
   path_marker.id = marker_id;
   path_marker.type =
@@ -350,7 +350,7 @@ OdrMapPathFinder::convertToPathIDMarkerMsg(geometry_msgs::Point &point,
                                            int marker_id) {
   visualization_msgs::Marker path_id_marker;
   path_id_marker.header.frame_id = "map";
-  path_id_marker.header.stamp = ros::Time::now();
+  // path_id_marker.header.stamp = ros::Time::now();
   path_id_marker.ns = "path_id";
   path_id_marker.id = marker_id;
   path_id_marker.type =
@@ -430,7 +430,7 @@ int main(int argc, char **argv) {
   ////////////////////////////////////////////////////////////////////////////
   boost::shared_ptr<std_msgs::String const> shared_map_msg =
       ros::topic::waitForMessage<std_msgs::String>(
-          "/carla/ego_vehicle/opendrive_map", nh);
+          "/carla/map", nh);
   std::string xml_str = shared_map_msg->data;
 
   /////////////////////////////////////////////////////////////////

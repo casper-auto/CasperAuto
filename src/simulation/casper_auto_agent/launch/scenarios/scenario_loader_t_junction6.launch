@@ -20,7 +20,7 @@
 
   <!--Scenario: Turning Junction 6 (left turn)-->
   <rosparam command="load"
-      file="$(find demo_entrance)/config/turning_junction_6.yaml"
+      file="$(find casper_auto_agent)/scenarios/turning_junction_6.yaml"
       ns="scenario"/>
   <arg name="town" default='Town01'/>
   <arg name="spawn_point" default="102,-129.5,1.0,0,0,180"/>
@@ -29,7 +29,7 @@
   <arg name="ghost_car" default="false"/>
   <arg name="ghost_point" default=""/>
 
-  <include file="$(find demo_entrance)/launch/carla_ros_bridge_scenario.launch">
+  <include file="$(find casper_auto_agent)/launch/carla_ros_bridge_scenario.launch">
     <arg name='host' value="$(arg host)" />
     <arg name='port' value="$(arg port)" />
     <arg name="town" value="$(arg town)" />
@@ -37,35 +37,13 @@
     <arg name="spawn_point" value="$(arg spawn_point)"/>
   </include>
 
-  <include file="$(find vehicle_models)/launch/vehicle_description_sim.launch" />
-
-  <include file="$(find region_of_interest)/launch/region_of_interest_format.launch">
-    <arg name="spawn_point" value="$(arg spawn_point)"/>
-    <arg name='role_name' value='$(arg role_name)'/>
-    <arg name='goal_point' value='$(arg goal_point)' />
-    <arg name='ghost_car' value='$(arg ghost_car)' />
-    <arg name='ghost_point' value='$(arg ghost_point)' />
-  </include>
-
-  <include file="$(find route_planner)/launch/route_planner.launch">
+  <include file="$(find carla_route_planner)/launch/carla_route_planner.launch">
     <arg name='role_name' value='$(arg role_name)'/>
     <arg name="spawn_point" value="$(arg spawn_point)"/>
     <arg name='route_range' value='$(arg route_range)' />
     <arg name='target_point' value='$(arg target_point)' />
   </include>
 
-  <include file="$(find odr_map_loader)/launch/odr_map_loader.launch">
-    <arg name="map_file" value="$(find odr_map_loader)/data/Town01.xodr" />
-  </include>
-
-  <!--include file="$(find replay_path_planner)/launch/replay_path_planner.launch">
-    <arg name='lookahead_distance' value='$(arg lookahead_distance)'/>
-  </include-->
-
-  <!--include file="$(find motion_controller)/launch/motion_controller.launch">
-    <arg name='control_method' value='$(arg control_method)'/>
-  </include-->
-
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find demo_entrance)/rviz/demo.rviz"/>
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find casper_auto_agent)/rviz/demo.rviz"/>
 
 </launch>

@@ -1,7 +1,7 @@
 <!-- -->
 <launch>
 
-  <rosparam command="load" file="$(find demo_entrance)/config/turning_junction_demo.yaml" ns="scenario"/>
+  <rosparam command="load" file="$(find casper_auto_agent)/scenarios/turning_junction_demo.yaml" ns="scenario"/>
 
   <node pkg="odr_map_loader" type="traffic_info_loader" name="traffic_info_loader" output="screen"/>
 
