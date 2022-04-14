@@ -17,7 +17,7 @@ Terminal 1: Under carla-setup,
 Terminal 2: Run an example scenario of highway following,
 
 ```
-roslaunch demo_entrance scenario_loader_highway_following.launch
+roslaunch casper_auto_agent scenario_loader_highway_following.launch
 ```
 
 
@@ -30,7 +30,7 @@ roslauch lattice_planner lattice_planner.launch
 Terminal 4: Start scenario runner and load to stopped vehicle,
 
 ```
-python scenario_runner.py --scenario HRIHighwayFollowing_4 --waitForEgo
+python scenario_runner.py --scenario CasperHighwayFollowing_4 --waitForEgo
 ```
 
 ![](./figs/example.png)
