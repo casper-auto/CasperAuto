@@ -412,7 +412,7 @@ void TrajectoryController::update_controls(double lag_throttle, double lag_brake
     }
 
     // Special case for stopping
-    if (v_desired < 0.01) {
+    if (v_desired < 0.1) {
       throttle_output = 0;
       steer_output = 0;
       brake_output = 1;

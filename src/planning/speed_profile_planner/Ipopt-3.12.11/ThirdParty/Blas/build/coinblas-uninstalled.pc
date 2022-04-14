@@ -1,0 +1,9 @@
+prefix=/usr/local
+libdir=/home/peng/workspaces/casper-auto/CasperAuto/src/planning/speed_profile_planner/Ipopt-3.12.11/ThirdParty/Blas/build
+
+Name: Blas
+Description: Basic linear algebra package
+URL: https://projects.coin-or.org/BuildTools
+Version: 1.4.6
+Libs: ${libdir}/libcoinblas.la  -L/usr/lib/gcc/x86_64-linux-gnu/9 -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/9/../../.. -lgfortran -lm -lquadmath
+Cflags:

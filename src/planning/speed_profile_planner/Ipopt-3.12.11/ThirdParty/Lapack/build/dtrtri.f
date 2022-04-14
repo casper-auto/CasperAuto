@@ -1,0 +1,1 @@
+../LAPACK/SRC/dtrtri.f

@@ -1,0 +1,38 @@
+# Copyright (C) 2010 Jelmer Ypma. All Rights Reserved.
+# This code is published under the Eclipse Public License.
+#
+# File:   Makevars.in
+# Author: Jelmer Ypma
+# Date:   14 April 2010
+#
+# Changelog:
+# 30/01/2011 - Changed LIBS to IPOPT_LIBS and INCL to IPOPT_INCL, since R re-defines LIBS and INCL.
+
+
+# C++ Compiler command
+CXX = g++
+
+# C++ Compiler options
+IPOPT_CXXFLAGS = -O3 -pipe -DNDEBUG    -DIPOPT_BUILD
+
+# additional C++ Compiler options for linking
+IPOPT_CXXLINKFLAGS =  -Wl,--rpath -Wl,/usr/local/lib
+
+# Include directories (we use the CYGPATH_W variables to allow compilation with Windows compilers)
+IPOPT_INCL = `PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig: pkg-config --cflags ipopt`
+#IPOPT_INCL = -I`$(CYGPATH_W) /usr/local/include/coin` 
+
+# Linker flags
+IPOPT_LIBS = `PKG_CONFIG_PATH=/usr/local/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/share/pkgconfig: pkg-config --libs ipopt`  -Wl,--rpath -Wl,/usr/local/lib
+##IPOPT_LIBS = -link -libpath:`$(CYGPATH_W) /usr/local/lib` libipopt.lib /usr/local/lib/libcoinlapack.a /usr/local/lib/libcoinblas.a -lgfortran  -L/usr/lib/gcc/x86_64-linux-gnu/9 -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/9/../../.. -lgfortran -lm -lquadmath /usr/local/lib/libcoinblas.a -lgfortran  -L/usr/lib/gcc/x86_64-linux-gnu/9 -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/9/../../.. -lgfortran -lm -lquadmath -lm  -ldl
+#IPOPT_LIBS = -L/usr/local/lib -lipopt /usr/local/lib/libcoinlapack.a /usr/local/lib/libcoinblas.a -lgfortran  -L/usr/lib/gcc/x86_64-linux-gnu/9 -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/9/../../.. -lgfortran -lm -lquadmath /usr/local/lib/libcoinblas.a -lgfortran  -L/usr/lib/gcc/x86_64-linux-gnu/9 -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/9/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/9/../../.. -lgfortran -lm -lquadmath -lm  -ldl  -Wl,--rpath -Wl,/usr/local/lib
+
+# The following is necessary under cygwin, if native compilers are used
+CYGPATH_W = echo
+
+# Define objects for R to build
+OBJECTS = ipoptr.o IpoptRNLP.o IpoptRJournal.o
+
+# Convert to R macros
+PKG_LIBS = ${IPOPT_CXXLINKFLAGS} ${IPOPT_LIBS}
+PKG_CXXFLAGS = ${IPOPT_CXXFLAGS} ${IPOPT_INCL} -I.

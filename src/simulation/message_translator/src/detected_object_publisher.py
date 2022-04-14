@@ -253,8 +253,9 @@ class DetectedObjectPublisher(object):
             predicted_line.pose.orientation.w = 1.0
             predicted_line.scale.x = 2
             predicted_line.color.r = 1.0
-            predicted_line.color.g = 1.0
-            predicted_line.color.a = 0.25
+            predicted_line.color.g = 0.7
+            predicted_line.color.b = 0.5
+            predicted_line.color.a = 0.5
 
             for wp in pred.trajectories[0].trajectory_estimated.waypoints:
 
@@ -288,8 +289,9 @@ class DetectedObjectPublisher(object):
             predicted_line.pose.orientation.w = 1.0
             predicted_line.scale.x = 1.0
             predicted_line.color.r = 1.0
-            predicted_line.color.g = 0.65
-            predicted_line.color.a = 0.25
+            predicted_line.color.g = 0.35
+            predicted_line.color.b = 0.5
+            predicted_line.color.a = 0.5
 
             for wp in pred.trajectories[0].trajectory_estimated.waypoints:
 

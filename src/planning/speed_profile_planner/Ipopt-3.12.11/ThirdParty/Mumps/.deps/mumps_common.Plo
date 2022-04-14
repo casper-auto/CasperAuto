@@ -1,0 +1,11 @@
+mumps_common.lo: MUMPS/src/mumps_common.c /usr/include/stdc-predef.h \
+ MUMPS/src/mumps_common.h MUMPS/include/mumps_compat.h \
+ MUMPS/include/mumps_c_types.h
+
+/usr/include/stdc-predef.h:
+
+MUMPS/src/mumps_common.h:
+
+MUMPS/include/mumps_compat.h:
+
+MUMPS/include/mumps_c_types.h:

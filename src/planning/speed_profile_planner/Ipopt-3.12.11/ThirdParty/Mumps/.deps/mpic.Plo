@@ -1,0 +1,6 @@
+mpic.lo: MUMPS/libseq/mpic.c /usr/include/stdc-predef.h \
+ MUMPS/libseq/mumps_mpi.h
+
+/usr/include/stdc-predef.h:
+
+MUMPS/libseq/mumps_mpi.h:

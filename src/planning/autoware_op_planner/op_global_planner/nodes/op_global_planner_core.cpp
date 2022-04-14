@@ -197,6 +197,7 @@ void GlobalPlanner::callbackGetRobotOdom(const nav_msgs::OdometryConstPtr& msg)
 
 void GlobalPlanner::callbackGetVehicleStatus(const geometry_msgs::TwistStampedConstPtr& msg)
 {
+  // ROS_INFO("Received current velocity in op global planner.");
   m_VehicleState.speed = msg->twist.linear.x;
   m_CurrentPose.v = m_VehicleState.speed;
   if(fabs(msg->twist.linear.x) > 0.25)

@@ -1,0 +1,10 @@
+<!-- -->
+<launch>
+  <node pkg="constant_vel_predict" type="constant_vel_predict_node" name="constant_vel_predict" output="screen" />
+
+  <include file="$(find replay_path_planner)/launch/replay_path_planner.launch" />
+
+  <include file="$(find speed_profile_planner)/launch/speed_profile_planner.launch" />
+
+  <include file="$(find trajectory_controller)/launch/trajectory_controller.launch" />
+</launch>

@@ -1,0 +1,9 @@
+prefix=/usr/local
+libdir=/home/peng/workspaces/casper-auto/CasperAuto/src/planning/speed_profile_planner/Ipopt-3.12.11/ThirdParty/ASL
+
+Name: ASL
+Description: AMPL Solver Library
+URL: https://projects.coin-or.org/BuildTools
+Version: 1.4.1
+Libs: ${libdir}/libcoinasl.la -lm -ldl 
+Cflags: -I/home/peng/workspaces/casper-auto/CasperAuto/src/planning/speed_profile_planner/Ipopt-3.12.11/ThirdParty/ASL -I/home/peng/workspaces/casper-auto/CasperAuto/src/planning/speed_profile_planner/Ipopt-3.12.11/ThirdParty/ASL/solvers

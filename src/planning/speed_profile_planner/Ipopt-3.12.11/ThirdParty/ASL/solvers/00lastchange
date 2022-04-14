@@ -1,0 +1,6 @@
+20180528
+  pfg_read.s, pfghread.c in solvers.tgz: initialize two fields for use
+with bogus .nl files (e.g., written by pyomo).
+  sphes.c in solvers.tgz: test for f_OPNUM in nonlinear "if" expressions
+in hv_fwd (as is done many other places).  This quiets a valgrind
+complaint.

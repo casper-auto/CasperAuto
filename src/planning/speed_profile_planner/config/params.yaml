@@ -1,0 +1,33 @@
+speed_profile_planner:
+  use_ghost: false
+  low_speed_cut: true
+  low_speed_thresh: 0.4
+  left_hand: false
+  speed_limit: 3.5
+  viz_mode: 1 # 0: off; 1: st graph on; 2: st graph & speed variance on
+  velocity_offset: 1 # shift speed profile by offset
+  car_following_distance: 10 # center to center
+  oncoming_car_distance: 8 # center to center
+  stop_line_offset: 0.0
+  stop_release_time: 3
+  crosswalk_span: 2.0
+  crosswalk_shift: 2.0
+  st_graph:
+    s_horizon: 50.0
+    t_horizon: 7.0
+    t_step: 0.1
+  mpc_config:
+    n_steps: 50
+    dt: 1.0
+    planning_dt: 0.1
+    max_iteration: "200"
+    tolerance: "1e-6"
+    displacement_weight: 10.0
+    vel_weight: 100.0
+    acc_weight: 1.0
+    acc_dot_weight: 100.0
+    throttle_brake_weight: 100.0
+    default_limit: 1.0e19
+    short_log_m: false
+    long_log_m: false
+    cost_log_m: false
