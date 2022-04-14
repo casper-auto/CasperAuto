@@ -4,7 +4,9 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
+        - /Perception1/DetectedObjectArray1
+        - /Perception1/DetectedObjectArray1/Status1
+        - /Prediction1/Prediction Paths1
       Splitter Ratio: 0.4446679949760437
     Tree Height: 771
   - Class: rviz/Selection
@@ -80,13 +82,13 @@ Visualization Manager:
           Stoplines: true
           Value: true
         Perception:
-          DetectedObjectArray: true
+          "": true
           Value: true
         Planning:
           "": true
           Value: true
         Prediction:
-          "": true
+          Prediction Paths: true
           Value: true
         Sensors:
           CarlaObjects: true
@@ -324,10 +326,10 @@ Visualization Manager:
       Displays:
         - Class: rviz/MarkerArray
           Enabled: true
-          Marker Topic: /casper_auto/detected_objects_marker
+          Marker Topic: /casper_auto/detected_object_markers
           Name: DetectedObjectArray
           Namespaces:
-            {}
+            "": true
           Queue Size: 100
           Value: true
       Enabled: true
@@ -336,7 +338,7 @@ Visualization Manager:
       Displays:
         - Class: rviz/MarkerArray
           Enabled: true
-          Marker Topic: /prediction/paths/display
+          Marker Topic: /casper_auto/predicted_path_markers
           Name: Prediction Paths
           Namespaces:
             {}

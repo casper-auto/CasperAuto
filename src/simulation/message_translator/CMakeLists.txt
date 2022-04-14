@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   visualization_msgs
+  casper_auto_msgs
 )
 
 catkin_python_setup()

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>constant_vel_predict</name>
+  <version>0.0.0</version>
+  <description>Prediction with constant velocity</description>
+  <maintainer email="amiranda@honda-ri.com">Alex Miranda</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>casper_auto_msgs</build_depend>
+  <exec_depend>roscpp</exec_depend>  
+  <exec_depend>casper_auto_msgs</exec_depend>
+  <export>
+  </export>
+</package>

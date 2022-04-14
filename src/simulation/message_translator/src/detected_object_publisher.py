@@ -8,6 +8,7 @@ import tf2_ros
 from geometry_msgs.msg import Pose2D, Point, PoseStamped
 from derived_object_msgs.msg import Object, ObjectArray
 from visualization_msgs.msg import Marker, MarkerArray
+from casper_auto_msgs.msg import Prediction, PredictionArray
 
 from utils.geometry_utils import *
 
@@ -41,12 +42,18 @@ class DetectedObjectPublisher(object):
             '/casper_auto/current_pose', PoseStamped, self.current_pose_callback, queue_size=10)
         rospy.Subscriber(
             '/casper_auto/detected_objects', ObjectArray, self.detected_objects_callback, queue_size=10)
+        rospy.Subscriber(
+            '/casper_auto/prediction/vehicles', PredictionArray, self.vehicles_prediction_callback, queue_size=10)
+        rospy.Subscriber(
+            '/casper_auto/prediction/pedestrians', PredictionArray, self.pedestrians_prediction_callback, queue_size=10)
 
         '''
         Publishers
         '''
         self.detected_objects_marker_pub = rospy.Publisher(
-            '/casper_auto/detected_objects_marker', MarkerArray, queue_size=10)
+            '/casper_auto/detected_object_markers', MarkerArray, queue_size=10)
+        self.predicted_paths_pub = rospy.Publisher(
+            '/casper_auto/predicted_path_markers', MarkerArray, queue_size=10)
 
         rospy.spin()
 
@@ -226,6 +233,76 @@ class DetectedObjectPublisher(object):
                 marker_array.markers.append(marker)
 
         self.detected_objects_marker_pub.publish(marker_array)
+
+    def vehicles_prediction_callback(self, msg):
+
+        predicted_lines = MarkerArray()
+
+        for pred in msg.predictions:
+
+            # for each object
+            predicted_line = Marker()
+            predicted_line.lifetime = rospy.Duration(0.2)
+            predicted_line.header.frame_id = "ego_vehicle"
+            predicted_line.header.stamp = rospy.get_rostime()
+            predicted_line.ns = "predicted_line"
+            predicted_line.id = pred.agent_id
+            predicted_line.action = Marker.ADD
+            predicted_line.type = Marker.LINE_STRIP
+
+            predicted_line.pose.orientation.w = 1.0
+            predicted_line.scale.x = 2
+            predicted_line.color.r = 1.0
+            predicted_line.color.g = 1.0
+            predicted_line.color.a = 0.25
+
+            for wp in pred.trajectories[0].trajectory_estimated.waypoints:
+
+                if self.curr_state_initialized:
+                    pt = Point()
+                    pt.x = wp.pose.pose.position.x
+                    pt.y = wp.pose.pose.position.y
+                    pt.z = wp.pose.pose.position.z
+                    predicted_line.points.append(pt)
+
+            predicted_lines.markers.append(predicted_line)
+
+        self.predicted_paths_pub.publish(predicted_lines)
+
+    def pedestrians_prediction_callback(self, msg):
+
+        predicted_lines = MarkerArray()
+
+        for pred in msg.predictions:
+
+            # for each object
+            predicted_line = Marker()
+            predicted_line.lifetime = rospy.Duration(0.2)
+            predicted_line.header.frame_id = "ego_vehicle"
+            # predicted_line.header.stamp = rospy.get_rostime()
+            predicted_line.ns = "predicted_line"
+            predicted_line.id = pred.agent_id
+            predicted_line.action = Marker.ADD
+            predicted_line.type = Marker.LINE_STRIP
+
+            predicted_line.pose.orientation.w = 1.0
+            predicted_line.scale.x = 1.0
+            predicted_line.color.r = 1.0
+            predicted_line.color.g = 0.65
+            predicted_line.color.a = 0.25
+
+            for wp in pred.trajectories[0].trajectory_estimated.waypoints:
+
+                if self.curr_state_initialized:
+                    pt = Point()
+                    pt.x = wp.pose.pose.position.x
+                    pt.y = wp.pose.pose.position.y
+                    pt.z = wp.pose.pose.position.z
+                    predicted_line.points.append(pt)
+
+            predicted_lines.markers.append(predicted_line)
+
+        self.predicted_paths_pub.publish(predicted_lines)
 
 
 '''
