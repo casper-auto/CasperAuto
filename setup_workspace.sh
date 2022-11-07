@@ -35,7 +35,7 @@ cd ..
 # apply git patch in ros-bridge
 cp scripts/update_ros_bridge.patch catkin_ws/src/carla-ros-bridge/
 cd catkin_ws/src/carla-ros-bridge && git apply update_ros_bridge.patch
-cd ../../..
+cd ../..
 
 # Create simbolic link of the packages in src
 echo "Creating simbolic link of the packages..."
