@@ -30,9 +30,10 @@ mkdir -p catkin_ws/src
 catkin init --workspace catkin_ws
 cd catkin_ws
 wstool init src $ROSINSTALLFILE
+cd ..
 
 # apply git patch in ros-bridge
-cp script/update_ros_bridge.patch catkin_ws/src/carla-ros-bridge/
+cp scripts/update_ros_bridge.patch catkin_ws/src/carla-ros-bridge/
 cd catkin_ws/src/carla-ros-bridge && git apply update_ros_bridge.patch
 cd ../../..
 
