@@ -14,6 +14,9 @@ Try ```./install-ubuntu-MPC.sh```. This will install all dependencies.
 
 The individual steps have been included for reference.  Please note that for any particular command, including execution of ```.sh``` scripts, it may be necessary to add ```sudo``` prior to the command.  It is also a good practice to run ```sudo apt-get update``` prior to installation of new libraries. The main dependencies are Ipopt and CppAD which will be installed by executing ```./install-ubuntu-MPC.sh```.
 
+> Download Mumps 4.10 via http://mumps.enseeiht.fr/MUMPS_4.10.0.tar.gz (or try
+http://graal.ens-lyon.fr/MUMPS/MUMPS_4.10.0.tar.gz if first URL doesn't work).
+
 ## Documentation and API
 
 ```bash
