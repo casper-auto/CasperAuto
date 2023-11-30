@@ -7,3 +7,5 @@ catkin_ws
 
 *.pcd
 *.pyc
+
+src/planning/speed_profile_planner/Ipopt-3.12.11
